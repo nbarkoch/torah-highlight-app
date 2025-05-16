@@ -19,18 +19,30 @@ const ReadingControls = ({
 }: ReadingControlsProps) => {
   const [sliderValue, setSliderValue] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1.0);
+  const [isDragging, setIsDragging] = useState(false);
 
-  // Update slider when currentTime changes
+  // Update slider when currentTime changes, but only if not dragging
   useEffect(() => {
-    setSliderValue(currentTime);
-  }, [currentTime]);
+    if (!isDragging) {
+      setSliderValue(currentTime);
+    }
+  }, [currentTime, isDragging]);
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     setSliderValue(value);
+
+    // Call onSeek in real-time as the user drags
+    onSeek(value);
   };
 
-  const handleSliderRelease = () => {
+  const handleSliderMouseDown = () => {
+    setIsDragging(true);
+  };
+
+  const handleSliderMouseUp = () => {
+    setIsDragging(false);
+    // Final seek when slider is released
     onSeek(sliderValue);
   };
 
@@ -69,15 +81,18 @@ const ReadingControls = ({
             max={duration || 100}
             value={sliderValue}
             onChange={handleSliderChange}
-            onMouseUp={handleSliderRelease}
-            onTouchEnd={handleSliderRelease}
+            onMouseDown={handleSliderMouseDown}
+            onTouchStart={handleSliderMouseDown}
+            onMouseUp={handleSliderMouseUp}
+            onTouchEnd={handleSliderMouseUp}
             style={{ width: "100%" }}
             aria-label="Seek audio position"
           />
         </div>
 
         <div className="time-display">
-          {formatTime(currentTime)} / {formatTime(duration)}
+          {formatTime(isDragging ? sliderValue : currentTime)} /{" "}
+          {formatTime(duration)}
         </div>
       </div>
 

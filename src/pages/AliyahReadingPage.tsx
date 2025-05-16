@@ -3,7 +3,7 @@ import ParashaText from "../components/ParashaText";
 import ReadingControls from "../components/ReadingControls";
 
 import { parseAliyahJson } from "../utils/parser";
-import type { ProcessedAliyah } from "../core/models/Parasha";
+import type { ProcessedAliyah, ProcessedWord } from "../core/models/Parasha";
 import { useWebAudio } from "../core/hooks/useWebAudio";
 import { useAudioSync } from "../core/hooks/useAudiSync";
 import type { AliyaData } from "../core/models/aliyaResp";
@@ -85,28 +85,11 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
   // Track the current verse for scrolling
   const [currentVerseIndex, setCurrentVerseIndex] = useState(0);
 
-  // Set up event listeners for word click events
-  useEffect(() => {
-    const handleWordClick = (e: Event) => {
-      const customEvent = e as CustomEvent;
-      if (customEvent.detail && typeof customEvent.detail.wordId === "string") {
-        // Extract verse index from the word ID
-        const verseIndex = parseInt(
-          customEvent.detail.wordId.split("-")[0],
-          10
-        );
-        if (!isNaN(verseIndex)) {
-          setCurrentVerseIndex(verseIndex);
-        }
-      }
-    };
-
-    document.addEventListener("wordClick", handleWordClick);
-
-    return () => {
-      document.removeEventListener("wordClick", handleWordClick);
-    };
-  }, []);
+  const handleWordClick = (clickedWord?: ProcessedWord) => {
+    if (clickedWord) {
+      seek(clickedWord.startTime);
+    }
+  };
 
   // Find which verse contains the highlighted word
   useEffect(() => {
@@ -141,6 +124,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
           verses={aliyahData.verses}
           highlightedWordId={highlightedWordId}
           offset={aliyahData.offset}
+          handleWordClick={handleWordClick}
         />
 
         <ReadingControls

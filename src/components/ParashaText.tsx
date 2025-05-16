@@ -1,11 +1,12 @@
 import { useMemo } from "react";
-import type { ProcessedVerse } from "../core/models/Parasha";
+import type { ProcessedVerse, ProcessedWord } from "../core/models/Parasha";
 import HighlightableWord from "./HighlightableWord";
 
 interface ParashaTextProps {
   verses: ProcessedVerse[];
   highlightedWordId: string | null;
   offset?: number;
+  handleWordClick: (word?: ProcessedWord) => void;
 }
 
 const convertToGematria = (num: number): string => {
@@ -54,6 +55,7 @@ const ParashaText = ({
   verses,
   highlightedWordId,
   offset = 0,
+  handleWordClick,
 }: ParashaTextProps) => {
   // Group verses by perek if showing perek divisions
   const versesByPerek = useMemo(() => {
@@ -64,16 +66,6 @@ const ParashaText = ({
       return acc;
     }, {});
   }, [verses]);
-
-  // Function to handle clicking on a word
-  const handleWordClick = (wordId: string, startTime: number) => {
-    // Create a custom event that the parent component can listen to
-    const event = new CustomEvent("wordClick", {
-      detail: { wordId, startTime },
-      bubbles: true,
-    });
-    document.dispatchEvent(event);
-  };
 
   return (
     <div className="parasha-text-container">
@@ -100,7 +92,7 @@ const ParashaText = ({
                     id={word.id}
                     text={word.text}
                     isHighlighted={word.id === highlightedWordId}
-                    onClick={() => handleWordClick(word.id, word.startTime)}
+                    onClick={() => handleWordClick(word)}
                   />
                 ))}
               </div>
