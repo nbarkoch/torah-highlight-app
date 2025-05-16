@@ -1,0 +1,229 @@
+@import url("https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&display=swap");
+
+.rtl {
+  direction: rtl;
+}
+
+/* ===== Layout Components ===== */
+.aliyah-reader-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+}
+
+.aliyah-header {
+  text-align: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 16px;
+}
+
+.aliyah-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.torah-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.reading-instructions {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+  font-size: 0.9rem;
+}
+
+.reading-instructions h3 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.reading-instructions ul {
+  padding-left: 20px;
+}
+
+.reading-info {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+/* ===== Torah Text Components ===== */
+.parasha-text-container {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.perek-heading {
+  text-align: center;
+  font-family: "David Libre", serif;
+  margin: 24px 0 16px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.verse-container {
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end; /* Right-to-left alignment */
+  direction: rtl;
+  padding: 8px 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.verse-container.active-verse {
+  background-color: rgba(255, 235, 59, 0.1);
+}
+
+.verse-number {
+  margin-left: 8px;
+  font-weight: bold;
+  color: #666;
+  min-width: 24px;
+  text-align: center;
+}
+
+.verse-words {
+  flex: 1;
+}
+
+.word {
+  display: inline-block;
+  margin: 0 2px;
+  padding: 0 2px;
+  background-color: transparent;
+  border-radius: 3px;
+  transition: background-color 0.1s ease;
+  font-family: "David Libre", serif;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.word:hover {
+  background-color: rgba(255, 235, 59, 0.3);
+}
+
+.word.highlighted {
+  background-color: #ffeb3b;
+}
+
+/* ===== Controls ===== */
+.controls-container {
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin: 16px auto;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.play-button {
+  background-color: #4051b5;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.play-button:hover {
+  background-color: #3041a5;
+}
+
+.slider-container {
+  flex-grow: 1;
+}
+
+.time-display {
+  min-width: 70px;
+  text-align: right;
+  font-family: monospace;
+  font-size: 14px;
+  color: #555;
+}
+
+/* ===== Loading & Error States ===== */
+.loading-container {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #4051b5;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #fff5f5;
+  border-left: 4px solid #f56565;
+  border-radius: 4px;
+  color: #c53030;
+}
+
+.error-container h2 {
+  margin-top: 0;
+  color: #c53030;
+}
+
+.error-container button {
+  background-color: #c53030;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+.error-container button:hover {
+  background-color: #9b2c2c;
+}
