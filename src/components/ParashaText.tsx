@@ -85,15 +85,13 @@ const ParashaText = ({
               id={`verse-${verse.number - 1}`} // Use 0-based index for IDs
               key={`verse-${verse.number}`}
               className={`verse-container ${
-                highlightedWordId?.startsWith(
-                  `${verse.number - 1 + pIndex === 0 ? offset : 0}-`
-                )
+                highlightedWordId?.startsWith(`${verse.number - 1}-`)
                   ? "active-verse"
                   : ""
               }`}
             >
               <div className="verse-number">
-                {convertToGematria(index + 1)}.
+                {convertToGematria(index + 1 + (pIndex === 0 ? offset : 0))}.
               </div>
               <div className="verse-words">
                 {verse.words.map((word) => (
