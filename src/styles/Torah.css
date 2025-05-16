@@ -452,3 +452,62 @@
     flex-wrap: wrap;
   }
 }
+
+/* Sticky Controls Styles */
+.sticky-controls-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding: 12px 16px;
+  z-index: 100;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* Adjust the reading-info style for the sticky position */
+.sticky-controls-wrapper .reading-info {
+  background-color: transparent;
+  padding: 8px 0;
+  margin-top: 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Ensure there's padding at the bottom of the page content to prevent the fixed controls from covering content */
+.aliyah-reader-container {
+  padding-bottom: 160px; /* Adjust based on the height of your controls */
+}
+
+/* Make sure controls are more compact in the fixed position */
+.sticky-controls-wrapper .controls-container {
+  margin: 0;
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Adjust mobile styles */
+@media (max-width: 768px) {
+  .sticky-controls-wrapper {
+    padding: 8px;
+  }
+
+  .aliyah-reader-container {
+    padding-bottom: 180px; /* More space on mobile */
+  }
+
+  /* Ensure the time display is visible */
+  .sticky-controls-wrapper .time-display {
+    font-size: 12px;
+  }
+
+  /* Make rate buttons smaller on mobile */
+  .sticky-controls-wrapper .rate-button {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+}

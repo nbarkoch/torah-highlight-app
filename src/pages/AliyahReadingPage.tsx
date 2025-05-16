@@ -126,27 +126,6 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
           offset={aliyahData.offset}
           handleWordClick={handleWordClick}
         />
-
-        <ReadingControls
-          isPlaying={isPlaying}
-          duration={duration}
-          currentTime={currentTime}
-          onPlayPause={togglePlayPause}
-          onSeek={seek}
-          onRateChange={setPlaybackRate}
-        />
-
-        <div className="reading-info">
-          <p>
-            <strong>Current Position:</strong> {formatTime(currentTime)} /{" "}
-            {formatTime(duration)}
-          </p>
-          {highlightedWordId && (
-            <p>
-              <strong>Current Verse:</strong> {currentVerseIndex + 1}
-            </p>
-          )}
-        </div>
       </div>
 
       <div className="reading-instructions">
@@ -158,6 +137,30 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
           <li>Click on any word to jump to that position in the audio</li>
           <li>Adjust the playback speed with the rate buttons</li>
         </ul>
+      </div>
+
+      {/* Fixed controls at the bottom */}
+      <div className="sticky-controls-wrapper">
+        <div className="reading-info">
+          <p>
+            <strong>Current Position:</strong> {formatTime(currentTime)} /{" "}
+            {formatTime(duration)}
+          </p>
+          {highlightedWordId && (
+            <p>
+              <strong>Current Verse:</strong> {currentVerseIndex + 1}
+            </p>
+          )}
+        </div>
+
+        <ReadingControls
+          isPlaying={isPlaying}
+          duration={duration}
+          currentTime={currentTime}
+          onPlayPause={togglePlayPause}
+          onSeek={seek}
+          onRateChange={setPlaybackRate}
+        />
       </div>
     </div>
   );
