@@ -19,8 +19,6 @@ export const useAudioSync = ({
   const words = useRef(getAllWords(verses));
 
   useEffect(() => {
-    if (!isPlaying) return;
-
     const currentWord = findCurrentWord(words.current, currentTime);
     setHighlightedWordId(currentWord?.id || null);
   }, [currentTime, isPlaying]);

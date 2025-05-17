@@ -87,6 +87,8 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
 
   const handleWordClick = (clickedWord?: ProcessedWord) => {
     if (clickedWord) {
+      const verseIndex = parseInt(clickedWord.id.split("-")[0], 10);
+      setCurrentVerseIndex(verseIndex);
       seek(clickedWord.startTime);
     }
   };
@@ -104,9 +106,23 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
       // Find the verse element and scroll to it smoothly
       const verseElement = document.getElementById(`verse-${verseIndex}`);
       if (verseElement) {
-        verseElement.scrollIntoView({
+        // Calculate an offset to account for the sticky controls
+        const stickyControlsHeight =
+          document.querySelector(".sticky-controls-wrapper")?.clientHeight || 0;
+
+        // Calculate the target scroll position manually
+        const elementRect = verseElement.getBoundingClientRect();
+        const elementTop = elementRect.top + window.pageYOffset;
+        const elementHeight = elementRect.height;
+
+        // Center the element accounting for the sticky controls
+        const targetScrollPosition =
+          elementTop - elementHeight / 2 - stickyControlsHeight / 2;
+
+        // Scroll to the calculated position
+        window.scrollTo({
+          top: targetScrollPosition,
           behavior: "smooth",
-          block: "center",
         });
       }
     }

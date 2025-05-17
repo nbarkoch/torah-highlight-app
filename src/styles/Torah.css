@@ -80,7 +80,6 @@
 }
 
 .verse-container {
-  margin-bottom: 16px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end; /* Right-to-left alignment */
@@ -95,10 +94,12 @@
 }
 
 .verse-number {
-  margin-left: 8px;
+  margin: -4px 0 0px;
   font-weight: bold;
   color: #666;
+  font-family: "David Libre", serif;
   min-width: 24px;
+  font-size: 1.5rem;
   text-align: center;
 }
 
@@ -113,7 +114,7 @@
   background-color: transparent;
   border-radius: 3px;
   transition: background-color 0.1s ease;
-  font-family: "David Libre", serif;
+  font-family: "ShlomoStam", serif;
   font-size: 20px;
   cursor: pointer;
 }
