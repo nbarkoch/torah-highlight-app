@@ -229,8 +229,7 @@ body {
   padding: 16px;
   background-color: white;
   border-radius: 12px;
-  margin: 16px auto;
-  max-width: 720px;
+  margin: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -464,16 +463,12 @@ body {
   right: 0;
   background-color: white;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
-  padding: 12px 16px;
   z-index: 100;
   max-width: 1000px;
   margin: 0 auto;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
-  border-top: 2px solid var(--accent-light, #fef3c7);
   transition: all 0.3s ease;
-  /* New transition properties - smooth movement and size changes */
-  transition-property: transform, height, padding, border-radius;
 }
 
 /* Compact mode instead of hidden */
@@ -601,11 +596,6 @@ body {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-}
-
-/* Make the cursor show it's interactive on the whole controls area */
-.sticky-controls-wrapper {
-  cursor: pointer;
 }
 
 /* Mobile styles adjustments */

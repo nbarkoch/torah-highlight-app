@@ -60,9 +60,8 @@ export const processAliyahForRendering = (aliyah: Aliyah): ProcessedAliyah => {
     const perek =
       aliyah.perek_starts.find(
         (pStart, pIndex) =>
-          (pStart.start_index <= index &&
-            index < aliyah.perek_starts[pIndex + 1]?.start_index) ??
-          Infinity
+          pStart.start_index <= index &&
+          index < (aliyah.perek_starts[pIndex + 1]?.start_index ?? Infinity)
       )?.perek ?? "";
 
     // Split the verse text into words and create word objects with timestamps

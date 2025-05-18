@@ -101,9 +101,9 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
-      if (currentScrollPos > lastScrollPos.current + 20) {
+      if (currentScrollPos > lastScrollPos.current) {
         setShowControls(false);
-      } else if (currentScrollPos < lastScrollPos.current - 20) {
+      } else if (currentScrollPos < lastScrollPos.current) {
         setShowControls(true);
       }
       lastScrollPos.current = currentScrollPos;
@@ -206,18 +206,6 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
       <div
         className={`sticky-controls-wrapper ${showControls ? "" : "hidden"}`}
       >
-        <div className="reading-info">
-          <div>
-            <strong>מיקום נוכחי:</strong> {formatTime(currentTime)} /{" "}
-            {formatTime(duration)}
-          </div>
-          {highlightedWordId && (
-            <div>
-              <strong>פסוק נוכחי:</strong> {currentVerseIndex + 1}
-            </div>
-          )}
-        </div>
-
         {isLoading ? (
           <div className="audio-loading-indicator">
             <div className="loading-spinner small"></div>
@@ -236,16 +224,6 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
       </div>
     </div>
   );
-};
-
-// Helper function to format time as MM:SS
-const formatTime = (time: number) => {
-  const totalSeconds = Math.floor(time);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${minutes.toString().padStart(2, "0")}:${seconds
-    .toString()
-    .padStart(2, "0")}`;
 };
 
 export default AliyahReadingPage;
