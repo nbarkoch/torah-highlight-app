@@ -6,12 +6,7 @@ import bereshitData from "../mocks/bereshit1.json";
 
 const HomePage = () => {
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
-      <AliyahReadingPage
-        jsonData={bereshitData}
-        audioUrl={"./bereshit/1.mp3"}
-      />
-    </div>
+    <AliyahReadingPage jsonData={bereshitData} audioUrl={"./bereshit/1.mp3"} />
   );
 };
 

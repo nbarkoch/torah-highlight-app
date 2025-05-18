@@ -44,7 +44,7 @@ const ParashaText = ({
   };
 
   return (
-    <div className="parasha-text-container">
+    <>
       {Object.entries(versesByPerek).map(([perek, perekVerses], pIndex) => {
         // Get all words for this perek in a flattened array
         const allWords = perekVerses.flatMap((verse, index) => {
@@ -55,7 +55,7 @@ const ParashaText = ({
         });
 
         return (
-          <div key={`perek-${perek || "unknown"}`} className="perek-container">
+          <div key={`perek-${perek || "unknown"}`}>
             {perek && <h2 className="perek-heading">פרק {perek}</h2>}
             <div className="continuous-text">
               {allWords.map((word) => {
@@ -93,7 +93,7 @@ const ParashaText = ({
           </div>
         );
       })}
-    </div>
+    </>
   );
 };
 

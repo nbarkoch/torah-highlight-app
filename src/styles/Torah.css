@@ -2,15 +2,15 @@
 @import url("https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&family=Frank+Ruhl+Libre:wght@300;400;700&display=swap");
 
 :root {
-  --primary-color: #9b542b; /* deep blue */
+  --primary-color: #7c7c7c; /* deep blue */
   --primary-light: #dbeafe; /* light blue */
-  --accent-color: #d97706; /* amber-600 */
+  --accent-color: #a3a3a3; /* amber-600 */
   --accent-light: #fef3c7; /* amber-100 */
   --accent-lighter: #fffbeb; /* amber-50 */
-  --highlight-color: #fbbf24; /* amber-400 */
+  --highlight-color: #ffe8ae; /* amber-400 */
   --text-primary: #1e293b; /* slate-800 */
   --text-secondary: #64748b; /* slate-500 */
-  --bg-paper: #fffbeb; /* amber-50 for Torah scroll paper look */
+  --bg-paper: #fffdf6; /* amber-50 for Torah scroll paper look */
   --bg-gradation: linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%);
   --border-scroll: #f59e0b; /* amber-500 */
   --scrollbar-track: #f1f5f9; /* slate-100 */
@@ -83,30 +83,10 @@ body {
   margin-bottom: 32px;
   background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23f5c85b' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
   position: relative;
-}
-
-/* Add decorative scroll edges */
-.torah-content::before,
-.torah-content::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  left: 0;
-  height: 12px;
-  background: var(--border-scroll);
-  opacity: 0.3;
-}
-
-.torah-content::before {
-  top: 0;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-}
-
-.torah-content::after {
-  bottom: 0;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  max-width: 1300px;
+  margin: auto;
+  padding-left: 200px;
+  padding-right: 200px;
 }
 
 .reading-instructions {
@@ -230,18 +210,6 @@ body {
 
 .verse-words {
   flex: 1;
-}
-
-.word {
-  display: inline-block;
-  margin: 0 2px;
-  padding: 0 2px;
-  background-color: transparent;
-  border-radius: 3px;
-  transition: background-color 0.1s ease;
-  font-family: "ShlomoStam", serif;
-  font-size: 30px;
-  cursor: pointer;
 }
 
 /* ===== Controls ===== */
@@ -484,10 +452,9 @@ body {
   background-color: white;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
   z-index: 100;
-  max-width: 1000px;
   margin: 0 auto;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   transition: all 0.3s ease;
 }
 
@@ -496,21 +463,7 @@ body {
   transform: translateY(calc(100% - 48px)); /* Show only mini controls */
   height: auto;
   padding: 0;
-  border-radius: 0;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
-}
-
-/* Mini controls that are always visible in compact mode */
-.mini-controls {
-  display: none; /* Hidden by default */
-  height: 48px;
-  background-color: white;
-  padding: 0 16px;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  align-items: center;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.06);
-  border-top: 2px solid var(--accent-light, #fef3c7);
 }
 
 .sticky-controls-wrapper.compact .mini-controls {
@@ -855,7 +808,6 @@ body {
   content: "";
   display: block;
   height: 20px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath d='M0,10 C25,20 75,20 100,10 C75,0 25,0 0,10 Z' fill='%23f3f0ea'/%3E%3C/svg%3E");
   background-repeat: repeat-x;
   background-size: 100px 20px;
   margin: -10px 0;
@@ -952,6 +904,7 @@ body {
 .continuous-text {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between; /* This will space out the words evenly */
   direction: rtl;
   padding: 16px;
@@ -961,22 +914,14 @@ body {
 /* Style for each word as a separate element */
 .word {
   display: inline-block;
-  margin: 4px 4px; /* Space between words */
-  padding: 2px 4px;
+  margin: 4px 0px; /* Space between words */
+  padding: 2px 10px;
   background-color: transparent;
-  border-radius: 3px;
+  border-radius: 20px;
   transition: background-color 0.1s ease;
   font-family: "ShlomoStam", serif;
-  font-size: 25px;
+  font-size: 40px;
   cursor: pointer;
-}
-
-/* Style for the verse starter - first word with verse number */
-.verse-starter {
-  display: inline-flex;
-  align-items: baseline;
-  white-space: nowrap; /* This keeps verse number and first word together */
-  margin: 4px 4px;
 }
 
 /* Verse number styling */

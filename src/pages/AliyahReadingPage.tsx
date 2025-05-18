@@ -125,7 +125,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
 
         // Center the element accounting for the sticky controls
         const targetScrollPosition =
-          elementTop - window.innerHeight / 2 + elementHeight / 2;
+          elementTop - window.innerHeight / 2 + elementHeight;
 
         // Scroll to the calculated position
         window.scrollTo({
