@@ -828,7 +828,7 @@ body {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(-5px);
+  transform: translateX(-50%);
   background-color: rgba(30, 41, 59, 0.8); /* slate-800 with opacity */
   color: white;
   font-size: 12px;
@@ -946,4 +946,60 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Main container for the text with flex layout */
+.continuous-text {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* This will space out the words evenly */
+  direction: rtl;
+  padding: 16px;
+  line-height: 1.8;
+}
+
+/* Style for each word as a separate element */
+.word {
+  display: inline-block;
+  margin: 4px 4px; /* Space between words */
+  padding: 2px 4px;
+  background-color: transparent;
+  border-radius: 3px;
+  transition: background-color 0.1s ease;
+  font-family: "ShlomoStam", serif;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+/* Style for the verse starter - first word with verse number */
+.verse-starter {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap; /* This keeps verse number and first word together */
+  margin: 4px 4px;
+}
+
+/* Verse number styling */
+.verse-number {
+  display: inline-block;
+  font-weight: bold;
+  color: #666;
+  font-family: "David Libre", serif;
+  font-size: 1.2rem;
+  padding-left: 5px;
+  margin-right: 3px;
+}
+
+/* Highlighted word styling */
+.word.highlighted {
+  background-color: var(--highlight-color, #fbbf24);
+  transform: scale(1.06);
+  box-shadow: 0 3px 8px rgba(251, 146, 60, 0.3);
+  z-index: 5;
+}
+
+/* Hover effects */
+.word:hover {
+  background-color: rgba(251, 191, 36, 0.3);
+  transform: scale(1.03);
 }

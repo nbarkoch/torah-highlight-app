@@ -26,59 +26,73 @@ const ParashaText = ({
     }, {});
   }, [verses]);
 
+  // Flatten all words into a single array for the flex layout
+  const getAllWordsFromVerse = (
+    verse: ProcessedVerse,
+    verseIndex: number,
+    verseNumG: string
+  ) => {
+    return verse.words.map((word, wordIndex) => {
+      return {
+        ...word,
+        verseIndex,
+        wordIndex,
+        isFirst: wordIndex === 0,
+        verseNumG,
+      };
+    });
+  };
+
   return (
     <div className="parasha-text-container">
-      {Object.entries(versesByPerek).map(([perek, perekVerses], pIndex) => (
-        <div key={`perek-${perek || "unknown"}`} className="perek-container">
-          {perek && <h2 className="perek-heading">פרק {perek}</h2>}
-          <div className="continuous-text">
-            {perekVerses.map((verse, index) => {
-              const verseNumG = numberToHebrew(
-                index + 1 + (pIndex === 0 ? offset : 0)
-              );
-              const isActive = highlightedWordId?.startsWith(
-                `${verse.number - 1}-`
-              );
+      {Object.entries(versesByPerek).map(([perek, perekVerses], pIndex) => {
+        // Get all words for this perek in a flattened array
+        const allWords = perekVerses.flatMap((verse, index) => {
+          const verseNumG = numberToHebrew(
+            index + 1 + (pIndex === 0 ? offset : 0)
+          );
+          return getAllWordsFromVerse(verse, verse.number - 1, verseNumG);
+        });
 
-              return (
-                <span
-                  id={`verse-${verse.number - 1}`}
-                  key={`verse-${verse.number}`}
-                  className={`verse-span ${isActive ? "active-verse" : ""}`}
-                >
-                  {verse.words.map((word, wordIndex) => {
-                    if (wordIndex === 0) {
-                      // For the first word, include the verse number as a non-breaking group
-                      return (
-                        <span className="verse-starter" key={word.id}>
-                          <span className="verse-number">{verseNumG}</span>
-                          <HighlightableWord
-                            id={word.id}
-                            text={word.text}
-                            isHighlighted={word.id === highlightedWordId}
-                            onClick={() => handleWordClick(word)}
-                          />
-                        </span>
-                      );
-                    } else {
-                      // For other words, render normally
-                      return (
-                        <HighlightableWord
-                          key={word.id}
-                          id={word.id}
-                          text={word.text}
-                          isHighlighted={word.id === highlightedWordId}
-                          onClick={() => handleWordClick(word)}
-                        />
-                      );
-                    }
-                  })}
-                </span>
-              );
-            })}
+        return (
+          <div key={`perek-${perek || "unknown"}`} className="perek-container">
+            {perek && <h2 className="perek-heading">פרק {perek}</h2>}
+            <div className="continuous-text">
+              {allWords.map((word) => {
+                if (word.isFirst) {
+                  // For the first word in a verse, include the verse number
+                  return (
+                    <span
+                      className="verse-starter"
+                      key={word.id}
+                      id={`verse-${word.verseIndex}`}
+                    >
+                      <span className="verse-number">{word.verseNumG}</span>
+                      <HighlightableWord
+                        id={word.id}
+                        text={word.text}
+                        isHighlighted={word.id === highlightedWordId}
+                        onClick={() => handleWordClick(word)}
+                      />
+                    </span>
+                  );
+                } else {
+                  // For other words, render normally
+                  return (
+                    <HighlightableWord
+                      key={word.id}
+                      id={word.id}
+                      text={word.text}
+                      isHighlighted={word.id === highlightedWordId}
+                      onClick={() => handleWordClick(word)}
+                    />
+                  );
+                }
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
