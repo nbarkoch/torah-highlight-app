@@ -28,34 +28,41 @@ const ParashaText = ({
 
   return (
     <div className="parasha-text-container">
-      {Object.entries(versesByPerek).map(([perek, perekVerses], pIndex) => {
-        return (
-          <div key={`perek-${perek || "unknown"}`} className="perek-container">
-            {perek && (
-              <div className="perek-header">
-                <h2 className="perek-heading">פרק {perek}</h2>
-                <div className="perek-decoration"></div>
-              </div>
-            )}
-            <div className="verses-list">
-              {perekVerses.map((verse, index) => {
-                const verseNumG = numberToHebrew(
-                  index + 1 + (pIndex === 0 ? offset : 0)
-                );
-                const isActive = highlightedWordId?.startsWith(
-                  `${verse.number - 1}-`
-                );
-                return (
-                  <div
-                    id={`verse-${verse.number - 1}`}
-                    key={`verse-${verse.number}`}
-                    className={`verse-container ${
-                      isActive ? "active-verse" : ""
-                    }`}
-                  >
-                    <div className="verse-number">{verseNumG}</div>
-                    <div className="verse-words">
-                      {verse.words.map((word) => (
+      {Object.entries(versesByPerek).map(([perek, perekVerses], pIndex) => (
+        <div key={`perek-${perek || "unknown"}`} className="perek-container">
+          {perek && <h2 className="perek-heading">פרק {perek}</h2>}
+          <div className="continuous-text">
+            {perekVerses.map((verse, index) => {
+              const verseNumG = numberToHebrew(
+                index + 1 + (pIndex === 0 ? offset : 0)
+              );
+              const isActive = highlightedWordId?.startsWith(
+                `${verse.number - 1}-`
+              );
+
+              return (
+                <span
+                  id={`verse-${verse.number - 1}`}
+                  key={`verse-${verse.number}`}
+                  className={`verse-span ${isActive ? "active-verse" : ""}`}
+                >
+                  {verse.words.map((word, wordIndex) => {
+                    if (wordIndex === 0) {
+                      // For the first word, include the verse number as a non-breaking group
+                      return (
+                        <span className="verse-starter" key={word.id}>
+                          <span className="verse-number">{verseNumG}</span>
+                          <HighlightableWord
+                            id={word.id}
+                            text={word.text}
+                            isHighlighted={word.id === highlightedWordId}
+                            onClick={() => handleWordClick(word)}
+                          />
+                        </span>
+                      );
+                    } else {
+                      // For other words, render normally
+                      return (
                         <HighlightableWord
                           key={word.id}
                           id={word.id}
@@ -63,15 +70,15 @@ const ParashaText = ({
                           isHighlighted={word.id === highlightedWordId}
                           onClick={() => handleWordClick(word)}
                         />
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                      );
+                    }
+                  })}
+                </span>
+              );
+            })}
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>
   );
 };

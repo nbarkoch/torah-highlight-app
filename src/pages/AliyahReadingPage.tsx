@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import ParashaText from "../components/ParashaText";
 import ReadingControls from "../components/ReadingControls";
 
@@ -94,24 +94,6 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
 
   // Track the current verse for scrolling
   const [currentVerseIndex, setCurrentVerseIndex] = useState(0);
-  const [showControls, setShowControls] = useState(true);
-  const lastScrollPos = useRef(0);
-
-  // Handle scroll to control visibility of the sticky player
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.pageYOffset;
-      if (currentScrollPos > lastScrollPos.current) {
-        setShowControls(false);
-      } else if (currentScrollPos < lastScrollPos.current) {
-        setShowControls(true);
-      }
-      lastScrollPos.current = currentScrollPos;
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const handleWordClick = (clickedWord?: ProcessedWord) => {
     if (clickedWord) {
@@ -203,9 +185,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
       </div>
 
       {/* Fixed controls at the bottom */}
-      <div
-        className={`sticky-controls-wrapper ${showControls ? "" : "hidden"}`}
-      >
+      <div className={`sticky-controls-wrapper`}>
         {isLoading ? (
           <div className="audio-loading-indicator">
             <div className="loading-spinner small"></div>

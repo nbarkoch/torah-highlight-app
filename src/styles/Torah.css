@@ -196,15 +196,36 @@ body {
   box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2);
 }
 
+.continuous-text {
+  flex-wrap: wrap;
+  direction: rtl;
+  padding: 16px;
+  line-height: 1.8;
+}
+
+.verse-span {
+  align-items: baseline;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+.verse-starter {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap; /* This ensures the verse number and first word stay together */
+}
+
+.verse-span.active-verse {
+  background-color: rgba(255, 235, 59, 0.1);
+}
+
 .verse-number {
-  margin: 0 0 0 12px;
+  display: inline-block;
   font-weight: bold;
-  color: var(--accent-color);
-  min-width: 28px;
-  font-size: 1.4rem;
+  color: #666;
   font-family: "David Libre", serif;
-  position: relative;
-  top: -2px;
+  font-size: 1.2rem;
+  padding-left: 5px;
 }
 
 .verse-words {
@@ -213,15 +234,14 @@ body {
 
 .word {
   display: inline-block;
-  margin: 0 3px;
-  padding: 0 4px;
+  margin: 0 2px;
+  padding: 0 2px;
   background-color: transparent;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  border-radius: 3px;
+  transition: background-color 0.1s ease;
   font-family: "ShlomoStam", serif;
-  font-size: 22px;
+  font-size: 30px;
   cursor: pointer;
-  position: relative;
 }
 
 /* ===== Controls ===== */
@@ -667,10 +687,6 @@ body {
 
   .aliyah-header h1 {
     font-size: 1.8rem;
-  }
-
-  .verse-number {
-    font-size: 1.2rem;
   }
 
   .controls-row {
