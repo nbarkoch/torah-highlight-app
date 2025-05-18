@@ -2,9 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&family=Frank+Ruhl+Libre:wght@300;400;700&display=swap");
 
 :root {
-  --primary-color: #7c7c7c; /* deep blue */
+  --primary-color: #676767; /* deep blue */
   --primary-light: #dbeafe; /* light blue */
-  --accent-color: #a3a3a3; /* amber-600 */
+  --accent-color: #878787; /* amber-600 */
   --accent-light: #fef3c7; /* amber-100 */
   --accent-lighter: #fffbeb; /* amber-50 */
   --highlight-color: #ffe8ae; /* amber-400 */
@@ -197,15 +197,6 @@ body {
 
 .verse-span.active-verse {
   background-color: rgba(255, 235, 59, 0.1);
-}
-
-.verse-number {
-  display: inline-block;
-  font-weight: bold;
-  color: #666;
-  font-family: "David Libre", serif;
-  font-size: 1.2rem;
-  padding-left: 5px;
 }
 
 .verse-words {
@@ -920,7 +911,7 @@ body {
   border-radius: 20px;
   transition: background-color 0.1s ease;
   font-family: "ShlomoStam", serif;
-  font-size: 40px;
+  font-size: 35px;
   cursor: pointer;
 }
 
@@ -930,7 +921,7 @@ body {
   font-weight: bold;
   color: #666;
   font-family: "David Libre", serif;
-  font-size: 1.2rem;
+  font-size: 2rem;
   padding-left: 5px;
   margin-right: 3px;
 }
@@ -947,4 +938,244 @@ body {
 .word:hover {
   background-color: rgba(251, 191, 36, 0.3);
   transform: scale(1.03);
+}
+.floating-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  outline: none;
+}
+
+.floating-toggle-button {
+  background-color: var(--primary-color, #9b542b);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  font-family: "David Libre", serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  outline: none;
+}
+
+.floating-toggle-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.floating-toggle-button:focus {
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4), 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.floating-toggle-button.active {
+  background-color: var(--accent-color, #d97706);
+}
+
+.toggle-icon {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0.3;
+}
+
+.toggle-indicator {
+  position: relative;
+  font-size: 26px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.toggle-indicator.decorated {
+  color: #fffbeb;
+}
+
+.toggle-indicator.plain {
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+/* Tooltip that appears on hover */
+.floating-toggle-tooltip {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  padding: 12px;
+  width: 220px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeInTooltip 0.3s ease forwards;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+@keyframes fadeInTooltip {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  direction: rtl;
+}
+
+.tooltip-header {
+  font-family: "David Libre", serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tooltip-header-en {
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.tooltip-hint {
+  font-size: 13px;
+  color: var(--text-secondary, #64748b);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.tooltip-hint-en {
+  font-size: 11px;
+  color: var(--text-secondary, #64748b);
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+/* Visual indicator for keyboard users */
+.floating-toggle-button::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.floating-toggle:focus-within .floating-toggle-button::after {
+  opacity: 1;
+}
+
+/* Animation when toggling */
+@keyframes toggleBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.floating-toggle-button:active .toggle-indicator {
+  animation: toggleBounce 0.3s ease;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .floating-toggle {
+    top: 15px;
+    right: 15px;
+  }
+
+  .floating-toggle-button {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .toggle-indicator {
+    font-size: 22px;
+  }
+
+  .floating-toggle-tooltip {
+    width: 180px;
+    padding: 10px;
+    top: 50px;
+  }
+
+  .tooltip-header {
+    font-size: 14px;
+  }
+}
+
+/* Make sure the toggle is visible against different backgrounds */
+.floating-toggle-button::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  z-index: -1;
+}
+
+/* Add a quick visual indicator when toggling */
+.toast-indicator {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+  z-index: 1002;
+  pointer-events: none;
+}
+
+.toast-indicator.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-indicator.hidden {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Style for the plain text (without nikkud) */
+.word.plain-text {
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }

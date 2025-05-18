@@ -1,7 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { ProcessedVerse, ProcessedWord } from "../core/models/Parasha";
 import HighlightableWord from "./HighlightableWord";
 import { numberToHebrew } from "../utils/gematria";
+import TextToggleSwitch from "./TextToggleSwitch";
+import { removeNikkudAndTaamim } from "../utils/forRead";
 
 interface ParashaTextProps {
   verses: ProcessedVerse[];
@@ -16,6 +18,8 @@ const ParashaText = ({
   offset = 0,
   handleWordClick,
 }: ParashaTextProps) => {
+  const [showPlainText, setShowPlainText] = useState(false);
+
   // Group verses by perek if showing perek divisions
   const versesByPerek = useMemo(() => {
     return verses.reduce<Record<string, ProcessedVerse[]>>((acc, verse) => {
@@ -25,6 +29,19 @@ const ParashaText = ({
       return acc;
     }, {});
   }, [verses]);
+
+  // Process words to handle with/without nikkud display
+  const processWord = (text: string) => {
+    return showPlainText ? removeNikkudAndTaamim(text) : text;
+  };
+
+  // Handler for keyboard events at the container level
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === " " || e.code === "Space") {
+      e.preventDefault();
+      setShowPlainText(!showPlainText);
+    }
+  };
 
   // Flatten all words into a single array for the flex layout
   const getAllWordsFromVerse = (
@@ -44,7 +61,16 @@ const ParashaText = ({
   };
 
   return (
-    <>
+    <div
+      className="parasha-text-container"
+      tabIndex={-1}
+      onKeyDown={handleKeyDown}
+    >
+      <TextToggleSwitch
+        isPlainText={showPlainText}
+        onChange={setShowPlainText}
+      />
+
       {Object.entries(versesByPerek).map(([perek, perekVerses], pIndex) => {
         // Get all words for this perek in a flattened array
         const allWords = perekVerses.flatMap((verse, index) => {
@@ -67,12 +93,15 @@ const ParashaText = ({
                       key={word.id}
                       id={`verse-${word.verseIndex}`}
                     >
-                      <span className="verse-number">{word.verseNumG}</span>
+                      <span className="verse-number">
+                        {!showPlainText ? word.verseNumG : " "}
+                      </span>
                       <HighlightableWord
                         id={word.id}
-                        text={word.text}
+                        text={processWord(word.text)}
                         isHighlighted={word.id === highlightedWordId}
                         onClick={() => handleWordClick(word)}
+                        originalText={word.text}
                       />
                     </span>
                   );
@@ -82,7 +111,8 @@ const ParashaText = ({
                     <HighlightableWord
                       key={word.id}
                       id={word.id}
-                      text={word.text}
+                      text={processWord(word.text)}
+                      originalText={word.text}
                       isHighlighted={word.id === highlightedWordId}
                       onClick={() => handleWordClick(word)}
                     />
@@ -93,7 +123,7 @@ const ParashaText = ({
           </div>
         );
       })}
-    </>
+    </div>
   );
 };
 

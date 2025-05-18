@@ -3,12 +3,14 @@ import { memo, useState } from "react";
 interface HighlightableWordProps {
   id: string;
   text: string;
+  originalText: string;
   isHighlighted: boolean;
   onClick?: () => void;
 }
 
 const HighlightableWord = ({
   text,
+  originalText,
   isHighlighted,
   onClick,
 }: HighlightableWordProps) => {
@@ -22,7 +24,8 @@ const HighlightableWord = ({
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      data-text={text} // For potential tooltip or accessibility features
+      data-text={text}
+      data-original-text={originalText}
     >
       {text}
     </span>
