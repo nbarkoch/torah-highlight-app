@@ -123,3 +123,45 @@ export function hebrewToNumber(hebrewStr: string): number {
 
   return sum;
 }
+
+export const convertToGematria = (num: number): string => {
+  const gematriaMap: [number, string][] = [
+    [400, "ת"],
+    [300, "ש"],
+    [200, "ר"],
+    [100, "ק"],
+    [90, "צ"],
+    [80, "פ"],
+    [70, "ע"],
+    [60, "ס"],
+    [50, "נ"],
+    [40, "מ"],
+    [30, "ל"],
+    [20, "כ"],
+    [10, "י"],
+    [9, "ט"],
+    [8, "ח"],
+    [7, "ז"],
+    [6, "ו"],
+    [5, "ה"],
+    [4, "ד"],
+    [3, "ג"],
+    [2, "ב"],
+    [1, "א"],
+  ];
+
+  let result = "";
+  let remaining = num;
+
+  for (const [value, letter] of gematriaMap) {
+    while (remaining >= value) {
+      result += letter;
+      remaining -= value;
+    }
+  }
+
+  // Fix problematic sequences:
+  result = result.replace("יה", "טו").replace("יו", "טז");
+
+  return result;
+};

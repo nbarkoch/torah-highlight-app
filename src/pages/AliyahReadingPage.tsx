@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ParashaText from "../components/ParashaText";
 import ReadingControls from "../components/ReadingControls";
 
@@ -40,7 +40,10 @@ const AliyahReadingPage = ({ jsonData, audioUrl }: AliyahReadingPageProps) => {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
-        <p>Processing Torah text and audio data...</p>
+        <p>מעבד את הטקסט והשמע של התורה...</p>
+        <p className="loading-subtitle">
+          Processing Torah text and audio data...
+        </p>
       </div>
     );
   }
@@ -48,9 +51,14 @@ const AliyahReadingPage = ({ jsonData, audioUrl }: AliyahReadingPageProps) => {
   if (error || !aliyahData) {
     return (
       <div className="error-container">
-        <h2>Error</h2>
-        <p>{error || "Unknown error occurred while processing the data"}</p>
-        <button onClick={() => window.location.reload()}>Try Again</button>
+        <h2>שגיאה</h2>
+        <p>{error || "אירעה שגיאה לא ידועה בעת עיבוד הנתונים"}</p>
+        <p className="error-subtitle">
+          {error || "Unknown error occurred while processing the data"}
+        </p>
+        <button onClick={() => window.location.reload()}>
+          נסה שוב / Try Again
+        </button>
       </div>
     );
   }
@@ -71,6 +79,8 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
     togglePlayPause,
     seek,
     setPlaybackRate,
+    isLoading,
+    error,
   } = useWebAudio({
     audioUrl: aliyahData.audioUrl,
   });
@@ -84,6 +94,24 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
 
   // Track the current verse for scrolling
   const [currentVerseIndex, setCurrentVerseIndex] = useState(0);
+  const [showControls, setShowControls] = useState(true);
+  const lastScrollPos = useRef(0);
+
+  // Handle scroll to control visibility of the sticky player
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      if (currentScrollPos > lastScrollPos.current + 20) {
+        setShowControls(false);
+      } else if (currentScrollPos < lastScrollPos.current - 20) {
+        setShowControls(true);
+      }
+      lastScrollPos.current = currentScrollPos;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleWordClick = (clickedWord?: ProcessedWord) => {
     if (clickedWord) {
@@ -107,8 +135,6 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
       const verseElement = document.getElementById(`verse-${verseIndex}`);
       if (verseElement) {
         // Calculate an offset to account for the sticky controls
-        const stickyControlsHeight =
-          document.querySelector(".sticky-controls-wrapper")?.clientHeight || 0;
 
         // Calculate the target scroll position manually
         const elementRect = verseElement.getBoundingClientRect();
@@ -117,7 +143,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
 
         // Center the element accounting for the sticky controls
         const targetScrollPosition =
-          elementTop - elementHeight / 2 - stickyControlsHeight / 2;
+          elementTop - window.innerHeight / 2 + elementHeight / 2;
 
         // Scroll to the calculated position
         window.scrollTo({
@@ -131,8 +157,9 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
   return (
     <div className="aliyah-reader-container">
       <header className="aliyah-header">
-        <h1>{aliyahData.name} </h1>
-        <p>Interactive Torah Reading</p>
+        <h1>{aliyahData.name}</h1>
+        <p>קריאה אינטראקטיבית בתורה</p>
+        <p className="english-subtitle">Interactive Torah Reading</p>
       </header>
 
       <div className="torah-content">
@@ -144,39 +171,68 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
         />
       </div>
 
+      {error && (
+        <div className="audio-error-container">
+          <h3>שגיאה בטעינת השמע / Audio Error</h3>
+          <p>{error}</p>
+          <p>נסה לטעון מחדש את הדף או להשתמש בדפדפן אחר.</p>
+          <p>Try refreshing the page or using a different browser.</p>
+        </div>
+      )}
+
       <div className="reading-instructions">
-        <h3>Instructions</h3>
+        <h3>הוראות / Instructions</h3>
         <ul>
-          <li>Press the play button to begin the reading</li>
-          <li>Words will be highlighted as they are read</li>
-          <li>Use the slider to navigate to a specific part of the reading</li>
-          <li>Click on any word to jump to that position in the audio</li>
-          <li>Adjust the playback speed with the rate buttons</li>
+          <li>לחץ על כפתור הניגון כדי להתחיל את הקריאה</li>
+          <li>המילים יודגשו בזמן שהם נקראות</li>
+          <li>השתמש במחוון כדי לנווט לחלק ספציפי של הקריאה</li>
+          <li>לחץ על כל מילה כדי לקפוץ לאותו מיקום בשמע</li>
+          <li>התאם את מהירות ההשמעה עם כפתורי הקצב</li>
         </ul>
+        <div className="english-instructions">
+          <ul>
+            <li>Press the play button to begin the reading</li>
+            <li>Words will be highlighted as they are read</li>
+            <li>
+              Use the slider to navigate to a specific part of the reading
+            </li>
+            <li>Click on any word to jump to that position in the audio</li>
+            <li>Adjust the playback speed with the rate buttons</li>
+          </ul>
+        </div>
       </div>
 
       {/* Fixed controls at the bottom */}
-      <div className="sticky-controls-wrapper">
+      <div
+        className={`sticky-controls-wrapper ${showControls ? "" : "hidden"}`}
+      >
         <div className="reading-info">
-          <p>
-            <strong>Current Position:</strong> {formatTime(currentTime)} /{" "}
+          <div>
+            <strong>מיקום נוכחי:</strong> {formatTime(currentTime)} /{" "}
             {formatTime(duration)}
-          </p>
+          </div>
           {highlightedWordId && (
-            <p>
-              <strong>Current Verse:</strong> {currentVerseIndex + 1}
-            </p>
+            <div>
+              <strong>פסוק נוכחי:</strong> {currentVerseIndex + 1}
+            </div>
           )}
         </div>
 
-        <ReadingControls
-          isPlaying={isPlaying}
-          duration={duration}
-          currentTime={currentTime}
-          onPlayPause={togglePlayPause}
-          onSeek={seek}
-          onRateChange={setPlaybackRate}
-        />
+        {isLoading ? (
+          <div className="audio-loading-indicator">
+            <div className="loading-spinner small"></div>
+            <span>טוען שמע... / Loading audio...</span>
+          </div>
+        ) : (
+          <ReadingControls
+            isPlaying={isPlaying}
+            duration={duration}
+            currentTime={currentTime}
+            onPlayPause={togglePlayPause}
+            onSeek={seek}
+            onRateChange={setPlaybackRate}
+          />
+        )}
       </div>
     </div>
   );

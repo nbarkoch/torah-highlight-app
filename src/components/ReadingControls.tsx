@@ -63,6 +63,9 @@ const ReadingControls = ({
       .padStart(2, "0")}`;
   };
 
+  // Calculate progress percentage for styling
+  const progressPercent = (currentTime / duration) * 100 || 0;
+
   return (
     <div className="controls-container">
       <div className="controls-row">
@@ -75,30 +78,40 @@ const ReadingControls = ({
         </button>
 
         <div className="slider-container">
-          <input
-            type="range"
-            min={0}
-            max={duration || 100}
-            value={sliderValue}
-            onChange={handleSliderChange}
-            onMouseDown={handleSliderMouseDown}
-            onTouchStart={handleSliderMouseDown}
-            onMouseUp={handleSliderMouseUp}
-            onTouchEnd={handleSliderMouseUp}
-            style={{ width: "100%" }}
-            aria-label="Seek audio position"
-          />
+          <div className="progress-bar-container">
+            <div
+              className="progress-bar-fill"
+              style={{ width: `${progressPercent}%` }}
+            ></div>
+            <input
+              type="range"
+              min={0}
+              max={duration || 100}
+              value={sliderValue}
+              onChange={handleSliderChange}
+              onMouseDown={handleSliderMouseDown}
+              onTouchStart={handleSliderMouseDown}
+              onMouseUp={handleSliderMouseUp}
+              onTouchEnd={handleSliderMouseUp}
+              style={{ width: "100%" }}
+              aria-label="Seek audio position"
+              className="progress-slider"
+            />
+          </div>
         </div>
 
         <div className="time-display">
-          {formatTime(isDragging ? sliderValue : currentTime)} /{" "}
-          {formatTime(duration)}
+          <span className="current-time">
+            {formatTime(isDragging ? sliderValue : currentTime)}
+          </span>
+          <span className="time-separator">/</span>
+          <span className="total-time">{formatTime(duration)}</span>
         </div>
       </div>
 
       {onRateChange && (
         <div className="playback-rate-controls">
-          <span>Speed: </span>
+          <span>מהירות:</span>
           {[0.5, 0.75, 1.0, 1.25, 1.5].map((rate) => (
             <button
               key={rate}

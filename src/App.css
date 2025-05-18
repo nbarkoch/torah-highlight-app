@@ -4,14 +4,6 @@
   direction: rtl;
 }
 
-/* ===== Layout Components ===== */
-.aliyah-reader-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: "Arial", sans-serif;
-}
-
 .aliyah-header {
   text-align: center;
   margin-bottom: 24px;
@@ -87,10 +79,6 @@
   padding: 8px 4px;
   border-radius: 4px;
   transition: background-color 0.3s ease;
-}
-
-.verse-container.active-verse {
-  background-color: rgba(255, 235, 59, 0.1);
 }
 
 .verse-number {
