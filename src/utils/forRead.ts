@@ -3,17 +3,18 @@
  */
 
 /**
- * Removes all Hebrew nikkud and taamim (vowel points and cantillation marks)
- * while preserving letters, maqaf (־), ASCII hyphen, and punctuation.
+ * Removes all Hebrew nikkud, taamim, and colons from the text
+ * This preserves letters while removing vowel points, cantillation marks, and verse-ending colons
  *
  * @param text - Hebrew text with nikkud/taamim
- * @returns Cleaned text without nikkud/taamim
+ * @returns Cleaned text without nikkud/taamim and colons
  */
 export const removeNikkudAndTaamim = (text: string): string => {
   if (!text) return text;
 
   // Hebrew nikkud and taamim range: \u0591 - \u05BD, \u05BF - \u05C7
-  return text.replace(/[\u0591-\u05BD\u05BF-\u05C7]/g, "");
+  // Also remove colons (:) which are used at the end of verses
+  return text.replace(/[\u0591-\u05BD\u05BF-\u05C7:]/g, "");
 };
 
 /**

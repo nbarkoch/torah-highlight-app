@@ -3,8 +3,6 @@ import type { ProcessedVerse, ProcessedWord } from "../core/models/Parasha";
 import HighlightableWord from "./HighlightableWord";
 import { numberToHebrew } from "../utils/gematria";
 import TextToggleSwitch from "./TextToggleSwitch";
-import { removeNikkudAndTaamim } from "../utils/forRead";
-
 interface ParashaTextProps {
   verses: ProcessedVerse[];
   highlightedWordId: string | null;
@@ -29,11 +27,6 @@ const ParashaText = ({
       return acc;
     }, {});
   }, [verses]);
-
-  // Process words to handle with/without nikkud display
-  const processWord = (text: string) => {
-    return showPlainText ? removeNikkudAndTaamim(text) : text;
-  };
 
   // Handler for keyboard events at the container level
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -93,15 +86,18 @@ const ParashaText = ({
                       key={word.id}
                       id={`verse-${word.verseIndex}`}
                     >
-                      <span className="verse-number">
-                        {!showPlainText ? word.verseNumG : " "}
+                      <span
+                        className="verse-number"
+                        style={{ opacity: showPlainText ? 0 : 1 }}
+                      >
+                        {word.verseNumG}
                       </span>
                       <HighlightableWord
                         id={word.id}
-                        text={processWord(word.text)}
+                        text={word.text}
                         isHighlighted={word.id === highlightedWordId}
                         onClick={() => handleWordClick(word)}
-                        originalText={word.text}
+                        showPlainText={showPlainText}
                       />
                     </span>
                   );
@@ -111,10 +107,10 @@ const ParashaText = ({
                     <HighlightableWord
                       key={word.id}
                       id={word.id}
-                      text={processWord(word.text)}
-                      originalText={word.text}
+                      text={word.text}
                       isHighlighted={word.id === highlightedWordId}
                       onClick={() => handleWordClick(word)}
+                      showPlainText={showPlainText}
                     />
                   );
                 }

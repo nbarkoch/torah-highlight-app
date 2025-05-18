@@ -1,16 +1,17 @@
 import { memo, useState } from "react";
+import { removeNikkudAndTaamim } from "../utils/forRead";
 
 interface HighlightableWordProps {
   id: string;
   text: string;
-  originalText: string;
   isHighlighted: boolean;
   onClick?: () => void;
+  showPlainText: boolean;
 }
 
 const HighlightableWord = ({
   text,
-  originalText,
+  showPlainText,
   isHighlighted,
   onClick,
 }: HighlightableWordProps) => {
@@ -25,9 +26,14 @@ const HighlightableWord = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       data-text={text}
-      data-original-text={originalText}
+      data-original-text={text}
     >
-      {text}
+      <span style={{ position: "relative" }}>
+        <span style={{ opacity: 0 }}>{text}</span>
+        <span style={{ position: "absolute", left: 0 }}>
+          {showPlainText ? removeNikkudAndTaamim(text) : text}
+        </span>
+      </span>
     </span>
   );
 };
