@@ -1,0 +1,232 @@
+.text-toggle-switch-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.text-toggle-pill {
+  position: relative;
+  width: 130px;
+  height: 60px;
+  background: white;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.toggle-spot {
+  position: absolute;
+  width: 60px;
+  height: 58px;
+  border-radius: 60px;
+  background-color: #333;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1;
+}
+
+.text-toggle-pill.left .toggle-spot {
+  left: 0;
+}
+
+.text-toggle-pill.right .toggle-spot {
+  left: 68px;
+}
+
+.toggle-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 50px;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.letter {
+  font-size: 32px;
+  font-weight: bold;
+  font-family: "ShlomoSemiStam";
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* When "decorated" option is active */
+.text-toggle-pill.left .toggle-option.decorated .letter {
+  color: white;
+  transform: scale(1);
+}
+
+.text-toggle-pill.left .toggle-option.plain .letter {
+  color: #888;
+  transform: scale(0.9);
+}
+
+/* When "plain" option is active */
+.text-toggle-pill.right .toggle-option.plain .letter {
+  color: white;
+  transform: scale(1);
+}
+
+.text-toggle-pill.right .toggle-option.decorated .letter {
+  color: #888;
+  transform: scale(0.9);
+}
+
+/* Tooltip styles */
+.toggle-tooltip {
+  position: absolute;
+  top: 70px;
+  right: 0;
+  width: 280px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  z-index: 1001;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  direction: rtl;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.tooltip-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #1e293b;
+}
+
+.tooltip-shortcut {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-modes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tooltip-mode {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mode-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #f8fafc;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.mode-icon.decorated {
+  color: #676767;
+}
+
+.mode-icon.plain {
+  color: #676767;
+}
+
+.mode-label {
+  font-size: 14px;
+  color: #334155;
+}
+
+/* Toast notification */
+.mode-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 17px;
+  font-weight: 600;
+  font-family: "David Libre", serif;
+  z-index: 2000;
+  transition: all 0.3s ease;
+  direction: rtl;
+}
+
+.mode-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-60px);
+}
+
+.mode-toast.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-30px);
+  pointer-events: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .text-toggle-switch-container {
+    top: 15px;
+    right: 15px;
+  }
+
+  .text-toggle-pill {
+    width: 110px;
+    height: 50px;
+    padding: 0 10px;
+  }
+
+  .toggle-spot {
+    width: 50px;
+    height: 50px;
+  }
+
+  .text-toggle-pill.right .toggle-spot {
+    left: 60px;
+  }
+
+  .toggle-option {
+    width: 45px;
+    height: 45px;
+  }
+
+  .letter {
+    font-size: 24px;
+  }
+
+  .toggle-tooltip {
+    width: 240px;
+  }
+}

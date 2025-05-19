@@ -1,81 +1,100 @@
-import { useState } from "react";
-
+import { useState, useEffect, useCallback } from "react";
+import "../styles/TextToggleSwitch.css";
 interface TextToggleSwitchProps {
   onChange: (showPlain: boolean) => void;
   isPlainText: boolean;
 }
 
 const TextToggleSwitch = ({ onChange, isPlainText }: TextToggleSwitchProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === " " || e.code === "Space") {
-      e.preventDefault();
-      onChange(!isPlainText);
+  const toggleMode = useCallback(() => {
+    onChange(!isPlainText);
+  }, [isPlainText, onChange]);
+
+  // Handle keyboard shortcut for switching modes
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === " " || e.code === "Space") {
+        // Only activate if not in an input field
+        if (
+          e.target instanceof HTMLElement &&
+          e.target.tagName !== "INPUT" &&
+          e.target.tagName !== "TEXTAREA"
+        ) {
+          e.preventDefault();
+          toggleMode();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, [isPlainText, toggleMode]);
+
+  // Show toast message when mode changes
+  useEffect(() => {
+    if (isPlainText) {
+      setToastMessage("מצב טקסט ללא ניקוד וטעמים");
+    } else {
+      setToastMessage("מצב טקסט עם ניקוד וטעמים");
     }
-  };
 
-  const handleContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-    onChange(!isPlainText);
-  };
+    setShowToast(true);
+    const timer = setTimeout(() => {
+      setShowToast(false);
+    }, 1500);
 
-  const handleToggleClick = () => {
-    onChange(!isPlainText);
-  };
-
-  const handleMouseEnter = () => {
-    setIsExpanded(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsExpanded(false);
-  };
+    return () => clearTimeout(timer);
+  }, [isPlainText]);
 
   return (
-    <div
-      className="floating-toggle"
-      onContextMenu={handleContextMenu}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      title="החלף בין טקסט עם וללא ניקוד/טעמים (לחץ על רווח או כפתור ימני) | Toggle between text with and without nikkud/taamim (press space or right-click)"
-    >
-      <button
-        className={`floating-toggle-button ${isPlainText ? "active" : ""}`}
-        onClick={handleToggleClick}
-        aria-pressed={isPlainText}
+    <>
+      <div
+        className="text-toggle-switch-container"
+        onMouseEnter={() => setIsTooltipVisible(true)}
+        onMouseLeave={() => setIsTooltipVisible(false)}
       >
-        <span className="toggle-icon">א</span>
-        <span
-          className={`toggle-indicator ${isPlainText ? "plain" : "decorated"}`}
+        <div
+          className={`text-toggle-pill ${isPlainText ? "right" : "left"}`}
+          onClick={toggleMode}
         >
-          {isPlainText ? "א" : "אָ"}
-        </span>
-      </button>
-
-      {isExpanded && (
-        <div className="floating-toggle-tooltip">
-          <div className="tooltip-content">
-            <div className="tooltip-header">
-              <span>
-                {isPlainText ? "ללא ניקוד וטעמים" : "עִם נִיקּוּד וְטַעֲמִים"}
-              </span>
-              <span className="tooltip-header-en">
-                {isPlainText ? "Without Nikkud/Taamim" : "With Nikkud/Taamim"}
-              </span>
-            </div>
-            <div className="tooltip-hint">
-              <span>לחץ ימני או מקש רווח להחלפה</span>
-              <span className="tooltip-hint-en">
-                Right-click or Space to toggle
-              </span>
-            </div>
+          <div className="toggle-spot"></div>
+          <div className="toggle-option decorated">
+            <span className="letter">{"אָּ֙"}</span>
+          </div>
+          <div className="toggle-option plain">
+            <span className="letter">{"א"}</span>
           </div>
         </div>
-      )}
-    </div>
+
+        {isTooltipVisible && (
+          <div className="toggle-tooltip">
+            <div className="tooltip-content">
+              <div className="tooltip-title">החלף מצב תצוגת טקסט</div>
+              <div className="tooltip-shortcut">
+                מקש רווח: החלפה מהירה בין המצבים
+              </div>
+              <div className="tooltip-modes">
+                <div className="tooltip-mode">
+                  <span className="mode-icon decorated">{"אָּ֙"}</span>
+                  <span className="mode-label">עם ניקוד וטעמים</span>
+                </div>
+                <div className="tooltip-mode">
+                  <span className="mode-icon plain">{"א"}</span>
+                  <span className="mode-label">ללא ניקוד וטעמים</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className={`mode-toast ${showToast ? "visible" : "hidden"}`}>
+        {toastMessage}
+      </div>
+    </>
   );
 };
 
