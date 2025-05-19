@@ -7,14 +7,15 @@ import pointerImage from "../../assets/images/pointer.png";
 interface TorahPointerProps {
   highlightedWordId: string | null;
   inactivityTimeout?: number; // Time in ms before pointer moves down when inactive
+  isVisible?: boolean;
 }
 
 const TorahPointer = ({
   highlightedWordId,
   inactivityTimeout = 5000, // Default 5 seconds
+  isVisible = false,
 }: TorahPointerProps) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [isVisible, setIsVisible] = useState(false);
   const [isLowered, setIsLowered] = useState(false);
   const lastUpdateTimeRef = useRef<number>(Date.now());
   const lastHighlightedWordIdRef = useRef<string | null>(null);
@@ -49,7 +50,7 @@ const TorahPointer = ({
 
     setPosition(newPosition);
     lastUpdateTimeRef.current = Date.now();
-    setIsVisible(true);
+
     setIsLowered(false);
   }, [highlightedWordId]);
 
@@ -98,8 +99,7 @@ const TorahPointer = ({
 
   // Ensure pointer is visible after first active word
   useEffect(() => {
-    if (highlightedWordId && !isVisible) {
-      setIsVisible(true);
+    if (highlightedWordId && isVisible) {
       updatePointerPosition();
     }
   }, [highlightedWordId, isVisible, updatePointerPosition]);

@@ -244,6 +244,7 @@ const ParashaText = ({
       <TorahPointer
         highlightedWordId={highlightedWordId}
         inactivityTimeout={5000}
+        isVisible={showPlainText}
       />
 
       {formattedVerses.map(({ perek, lines }, perekIndex) => (
@@ -260,7 +261,9 @@ const ParashaText = ({
                 key={line.id}
                 id={line.id}
                 className={`torah-line ${
-                  isActiveLine ? "active-line current-reading-line" : ""
+                  !showPlainText && isActiveLine
+                    ? "active-line current-reading-line"
+                    : ""
                 }`}
                 dir="rtl"
               >
@@ -295,7 +298,9 @@ const ParashaText = ({
                           key={word.id}
                           id={word.id}
                           text={word.text}
-                          isHighlighted={word.id === highlightedWordId}
+                          isHighlighted={
+                            !showPlainText && word.id === highlightedWordId
+                          }
                           onClick={() => handleWordClick(word)}
                           showPlainText={showPlainText}
                         />
@@ -307,7 +312,9 @@ const ParashaText = ({
                         key={word.id}
                         id={word.id}
                         text={word.text}
-                        isHighlighted={word.id === highlightedWordId}
+                        isHighlighted={
+                          !showPlainText && word.id === highlightedWordId
+                        }
                         onClick={() => handleWordClick(word)}
                         showPlainText={showPlainText}
                       />
