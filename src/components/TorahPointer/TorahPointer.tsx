@@ -113,13 +113,15 @@ const TorahPointer = ({
       ref={pointerRef}
       className={`torah-pointer ${isLowered ? "lowered" : ""}`}
       style={{
+        width: "20px",
+        height: "20px",
         position: "absolute",
-        top: `${position.top - 270}px`,
-        left: `${position.left - 270}px`,
+        top: `${position.top - 280}px`,
+        left: `${position.left - 350}px`,
         transform: "translateX(-50%)", // Center the pointer horizontally
         transition: "top 0.3s ease, left 0.3s ease, transform 0.5s ease",
       }}
-      aria-hidden="true" // This is decorative, not functional for screen readers
+      aria-hidden="true"
     >
       <img src={pointerImage} alt="" className="pointer-image" />
     </div>
