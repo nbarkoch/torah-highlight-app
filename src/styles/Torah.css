@@ -1179,3 +1179,120 @@ body {
   font-weight: 400;
   letter-spacing: 0.02em;
 }
+
+/* Line-based text layout styles */
+.torah-line {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  line-height: 1.6;
+  position: relative;
+  direction: rtl;
+}
+
+/* Add a subtle line separator effect between lines */
+.torah-line:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(217, 119, 6, 0.1),
+    transparent
+  );
+}
+
+/* Add some spacing between pereks */
+.perek-container {
+  margin-bottom: 2rem;
+}
+
+/* Ensure verse numbers and first words always stay together */
+.verse-starter {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-right: 2px;
+}
+
+/* Adjust verse number positioning */
+.verse-number {
+  display: inline-flex;
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  opacity: 0.8;
+  margin-left: 4px;
+  transition: opacity 0.3s ease;
+}
+
+/* When measuring, hide elements */
+.measuring-container {
+  visibility: hidden;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+/* Highlight the current verse for better readability */
+.torah-line.active-line {
+  background-color: rgba(251, 191, 36, 0.08);
+  border-radius: 6px;
+}
+
+/* Adjust word spacing for better readability */
+.word {
+  margin: 0 2px;
+  padding: 2px 5px;
+}
+
+/* Add responsive adjustments */
+@media (max-width: 768px) {
+  .torah-line {
+    padding: 4px 0;
+  }
+
+  .verse-number {
+    font-size: 1rem;
+  }
+
+  .word {
+    font-size: 30px;
+  }
+}
+
+/* Alef first letter styling for emphasis */
+.word.first-alef {
+  font-size: 110%;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Special styling for verse-initial words */
+.word.verse-initial {
+  margin-right: 0;
+}
+
+/* Animation for current reading line */
+@keyframes currentLineGlow {
+  0% {
+    box-shadow: 0 0 3px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 3px rgba(251, 191, 36, 0.3);
+  }
+}
+
+.torah-line.current-reading-line {
+  animation: currentLineGlow 2s ease-in-out infinite;
+  background-color: rgba(251, 191, 36, 0.1);
+  border-radius: 6px;
+}

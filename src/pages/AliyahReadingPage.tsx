@@ -92,49 +92,11 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
     currentTime,
   });
 
-  // Track the current verse for scrolling
-  const [currentVerseIndex, setCurrentVerseIndex] = useState(0);
-
   const handleWordClick = (clickedWord?: ProcessedWord) => {
     if (clickedWord) {
-      const verseIndex = parseInt(clickedWord.id.split("-")[0], 10);
-      setCurrentVerseIndex(verseIndex);
       seek(clickedWord.startTime);
     }
   };
-
-  // Find which verse contains the highlighted word
-  useEffect(() => {
-    if (!highlightedWordId) return;
-
-    // Extract verse index from the word ID (format: "verseIndex-wordIndex")
-    const verseIndex = parseInt(highlightedWordId.split("-")[0], 10);
-
-    if (!isNaN(verseIndex) && verseIndex !== currentVerseIndex) {
-      setCurrentVerseIndex(verseIndex);
-
-      // Find the verse element and scroll to it smoothly
-      const verseElement = document.getElementById(`verse-${verseIndex}`);
-      if (verseElement) {
-        // Calculate an offset to account for the sticky controls
-
-        // Calculate the target scroll position manually
-        const elementRect = verseElement.getBoundingClientRect();
-        const elementTop = elementRect.top + window.pageYOffset;
-        const elementHeight = elementRect.height;
-
-        // Center the element accounting for the sticky controls
-        const targetScrollPosition =
-          elementTop - window.innerHeight / 2 + elementHeight;
-
-        // Scroll to the calculated position
-        window.scrollTo({
-          top: targetScrollPosition,
-          behavior: "smooth",
-        });
-      }
-    }
-  }, [highlightedWordId, currentVerseIndex]);
 
   return (
     <div className="aliyah-reader-container">
