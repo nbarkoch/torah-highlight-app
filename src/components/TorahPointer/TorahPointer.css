@@ -1,87 +1,48 @@
 .torah-pointer {
   position: absolute;
-  z-index: 1000;
+  z-index: 1;
   pointer-events: none; /* Allows click events to pass through */
   will-change: transform, top, left;
-  transform-origin: bottom center;
 }
 
-.pointer-handle {
-  width: 4px;
-  height: 180px;
-  background: linear-gradient(to bottom, #d4af37 0%, #c89b3c 100%);
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.pointer-head {
-  width: 14px;
-  height: 14px;
-  background: radial-gradient(circle, #f5d76e 0%, #e0ac30 100%);
-  position: absolute;
-  bottom: 180px; /* Position it at the top of the handle */
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg); /* Rotated to make a diamond shape */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+.pointer-image {
+  height: 500px; /* Adjust based on your PNG image size */
+  width: auto;
+  transform-origin: top center;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
 }
 
 /* Animation for the pointer when it's lowered */
-.torah-pointer.lowered {
+.torah-pointer.lowered .pointer-image {
   transform: translateY(20px);
-  transition: transform 0.5s ease-in-out;
+  opacity: 0.8;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
-.torah-pointer:not(.lowered) {
+.torah-pointer:not(.lowered) .pointer-image {
   transform: translateY(0);
-  transition: transform 0.3s ease-out;
-}
-
-/* Add subtle shadow for depth */
-.torah-pointer::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 5px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0.2) 0%,
-    rgba(0, 0, 0, 0) 70%
-  );
-  border-radius: 50%;
+  opacity: 1;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
 /* Add a subtle bounce animation */
-@keyframes pointerBounce {
+@keyframes pointerHover {
   0%,
   100% {
-    transform: translateY(0) translateX(-50%);
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-2px) translateX(-50%);
+    transform: translateY(-3px);
   }
 }
 
-.pointer-head {
-  animation: pointerBounce 1.5s ease-in-out infinite;
+.torah-pointer:not(.lowered) .pointer-image {
+  animation: pointerHover 2s ease-in-out infinite;
 }
 
 /* Media query to adjust size on smaller screens */
 @media (max-width: 768px) {
-  .pointer-handle {
-    height: 120px;
-    width: 3px;
-  }
-
-  .pointer-head {
-    width: 10px;
-    height: 10px;
-    bottom: 120px;
+  .pointer-image {
+    height: 100px;
   }
 }

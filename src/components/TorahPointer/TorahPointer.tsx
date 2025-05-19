@@ -1,6 +1,9 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import "./TorahPointer.css";
 
+// Import PNG pointer image
+import pointerImage from "../../assets/images/pointer.png";
+
 interface TorahPointerProps {
   highlightedWordId: string | null;
   inactivityTimeout?: number; // Time in ms before pointer moves down when inactive
@@ -14,9 +17,8 @@ const TorahPointer = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isLowered, setIsLowered] = useState(false);
   const lastUpdateTimeRef = useRef<number>(Date.now());
-  const lastPositionRef = useRef({ top: 0, left: 0 });
-  const pointerRef = useRef<HTMLDivElement>(null);
   const lastHighlightedWordIdRef = useRef<string | null>(null);
+  const pointerRef = useRef<HTMLDivElement>(null);
 
   // Function to update pointer position based on the highlighted word
   const updatePointerPosition = useCallback(() => {
@@ -26,51 +28,26 @@ const TorahPointer = ({
     if (!targetWordId) return;
 
     // Find the word element
-    const wordElement =
-      document.querySelector(`.word[id="${targetWordId}"]`) ||
-      document.querySelector(`.word[data-word-id="${targetWordId}"]`);
+    const wordElement = document.querySelector(
+      `.word[data-word-id="${targetWordId}"]`
+    );
 
     if (!wordElement) {
-      // Try alternative selector that matches your DOM structure
-      const alternativeElement =
-        document.querySelector(`[id="${targetWordId}"]`) ||
-        document.querySelector(`[data-id="${targetWordId}"]`);
-
-      if (!alternativeElement) {
-        console.log(`Word element with ID ${targetWordId} not found`);
-        return;
-      }
-
-      const rect = alternativeElement.getBoundingClientRect();
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
-
-      // Position at the bottom right corner of the word
-      const newPosition = {
-        top: rect.bottom + scrollTop,
-        left: rect.right + scrollLeft - 5, // Small offset for better positioning
-      };
-
-      setPosition(newPosition);
-      lastPositionRef.current = newPosition;
-      lastUpdateTimeRef.current = Date.now();
-      setIsVisible(true);
-      setIsLowered(false);
+      console.log(`Word element with ID ${targetWordId} not found`);
       return;
     }
 
     const rect = wordElement.getBoundingClientRect();
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
 
-    // Position at the bottom right corner of the word
+    // Position pointer directly under the highlighted word
+    // The pointer image has the yad (pointing hand) at its bottom
     const newPosition = {
-      top: rect.bottom + scrollTop,
-      left: rect.right + scrollLeft - 5, // Small offset for better positioning
+      top: rect.bottom + scrollTop + 5, // Small offset below the word
+      left: rect.left + rect.width / 2, // Center the pointer horizontally with the word
     };
 
     setPosition(newPosition);
-    lastPositionRef.current = newPosition;
     lastUpdateTimeRef.current = Date.now();
     setIsVisible(true);
     setIsLowered(false);
@@ -105,7 +82,7 @@ const TorahPointer = ({
   // Adjust position when window scrolls or resizes
   useEffect(() => {
     const handleViewportChange = () => {
-      if (highlightedWordId) {
+      if (highlightedWordId || lastHighlightedWordIdRef.current) {
         updatePointerPosition();
       }
     };
@@ -137,14 +114,14 @@ const TorahPointer = ({
       className={`torah-pointer ${isLowered ? "lowered" : ""}`}
       style={{
         position: "absolute",
-        top: `${position.top - 50}px`,
-        left: `${position.left - 200}px`,
-        transition: "top 0.3s ease, left 0.3s ease, transform 0.3s ease",
+        top: `${position.top - 270}px`,
+        left: `${position.left - 270}px`,
+        transform: "translateX(-50%)", // Center the pointer horizontally
+        transition: "top 0.3s ease, left 0.3s ease, transform 0.5s ease",
       }}
       aria-hidden="true" // This is decorative, not functional for screen readers
     >
-      <div className="pointer-handle"></div>
-      <div className="pointer-head"></div>
+      <img src={pointerImage} alt="" className="pointer-image" />
     </div>
   );
 };
