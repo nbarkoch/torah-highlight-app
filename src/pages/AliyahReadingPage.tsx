@@ -95,11 +95,15 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
     }
   };
 
-  // Platform-agnostic synchronization logic
-  const { highlightedWordId } = useAudioSync({
+  const [highlightedWordId, setHighlightedWordId] = useState<string | null>(
+    null
+  );
+
+  useAudioSync({
     verses: aliyahData.verses,
     isPlaying,
     currentTime,
+    setHighlightedWordId,
   });
 
   const [showPlainText, setShowPlainText] = useState(false);
@@ -107,6 +111,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
   const handleWordClick = (clickedWord?: ProcessedWord) => {
     if (clickedWord) {
       seek(clickedWord.startTime);
+      setHighlightedWordId(clickedWord.id);
     }
   };
 
