@@ -10,7 +10,8 @@ export const findCurrentWord = (
   // Find the word where currentTime falls between startTime and endTime
   return (
     words.find(
-      (word) => currentTime >= word.startTime && currentTime < word.endTime
+      (word) =>
+        currentTime + 0.2 >= word.startTime && currentTime < word.endTime
     ) || null
   );
 };
