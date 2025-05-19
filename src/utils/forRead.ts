@@ -14,7 +14,7 @@ export const removeNikkudAndTaamim = (text: string): string => {
 
   // Hebrew nikkud and taamim range: \u0591 - \u05BD, \u05BF - \u05C7
   // Also remove colons (:) which are used at the end of verses
-  return text.replace(/[\u0591-\u05BD\u05BF-\u05C7:]/g, "");
+  return text.replace("־", " ").replace(/[\u0591-\u05BD\u05BF-\u05C7:]/g, "");
 };
 
 /**

@@ -246,7 +246,6 @@ const ParashaText = ({
           className="perek-container"
         >
           {perek && <h2 className="perek-heading">פרק {perek}</h2>}
-
           {lines.map((line) => {
             const isActiveLine = line.id === activeLineId;
 
@@ -274,11 +273,17 @@ const ParashaText = ({
                         key={word.id}
                         id={`verse-${word.verseIndex}`}
                       >
-                        <span
-                          className="verse-number"
-                          style={{ opacity: showPlainText ? 0 : 1 }}
-                        >
-                          {word.verseNumG}
+                        <span className="verse-number">
+                          <span
+                            style={{
+                              position: "absolute",
+                              left: -2.5,
+                              bottom: -15,
+                              opacity: showPlainText ? 0 : 0.8,
+                            }}
+                          >
+                            {word.verseNumG}
+                          </span>
                         </span>
                         <HighlightableWord
                           key={word.id}
