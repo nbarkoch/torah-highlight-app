@@ -14,6 +14,7 @@ const HighlightableWord = ({
   showPlainText,
   isHighlighted,
   onClick,
+  id,
 }: HighlightableWordProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -27,6 +28,7 @@ const HighlightableWord = ({
       onMouseLeave={() => setIsHovered(false)}
       data-text={text}
       data-original-text={text}
+      data-word-id={id}
     >
       <span style={{ position: "relative" }}>
         <span style={{ opacity: 0 }}>{text}</span>

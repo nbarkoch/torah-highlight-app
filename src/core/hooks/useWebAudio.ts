@@ -43,42 +43,46 @@ export const useWebAudio = ({ audioUrl }: UseWebAudioProps) => {
       setIsPlaying(false);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
       }
+    });
+
+    // Use timeupdate event instead of requestAnimationFrame for less frequent updates
+    audio.addEventListener("timeupdate", () => {
+      setCurrentTime(audio.currentTime);
     });
 
     // Explicitly try to load the audio
     audio.load();
 
     return () => {
-      audio.pause();
-      audio.src = "";
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
       }
+
+      // Remove all event listeners
+      audio.removeEventListener("loadstart", () => {});
+      audio.removeEventListener("loadeddata", () => {});
+      audio.removeEventListener("loadedmetadata", () => {});
+      audio.removeEventListener("ended", () => {});
+      audio.removeEventListener("timeupdate", () => {});
+
+      audio.pause();
+      audio.src = "";
     };
   }, [audioUrl]);
-
-  const updateTime = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
-      animationRef.current = requestAnimationFrame(updateTime);
-    }
-  };
 
   const togglePlayPause = () => {
     if (!audioRef.current) return;
 
-    if (isPlaying) {
-      audioRef.current.pause();
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    } else {
+    if (!isPlaying) {
       audioRef.current.play().catch((err) => {
         console.error("Play error:", err);
         setError(`Failed to play audio: ${err.message}`);
       });
-      animationRef.current = requestAnimationFrame(updateTime);
+    } else {
+      audioRef.current.pause();
     }
 
     setIsPlaying(!isPlaying);

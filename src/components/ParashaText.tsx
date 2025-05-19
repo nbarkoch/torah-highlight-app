@@ -3,6 +3,7 @@ import type { ProcessedVerse, ProcessedWord } from "../core/models/Parasha";
 import HighlightableWord from "./HighlightableWord";
 import { numberToHebrew } from "../utils/gematria";
 import TextToggleSwitch from "./TextToggleSwitch";
+import TorahPointer from "./TorahPointer/TorahPointer";
 
 interface ParashaTextProps {
   verses: ProcessedVerse[];
@@ -195,38 +196,39 @@ const ParashaText = ({
       setActiveLineId(null);
       return;
     }
-
     // Find which line contains the highlighted word
     for (const perekData of formattedVerses) {
       for (const line of perekData.lines) {
         if (line.lineWords.some((word) => word.id === highlightedWordId)) {
           setActiveLineId(line.id);
-
-          // Scroll to the active line
-          setTimeout(() => {
-            const lineElement = document.getElementById(line.id);
-            if (lineElement) {
-              // Calculate scroll position to center the line
-              const rect = lineElement.getBoundingClientRect();
-              const scrollTop =
-                rect.top +
-                window.pageYOffset -
-                window.innerHeight / 2 +
-                rect.height / 2 +
-                100;
-
-              window.scrollTo({
-                top: scrollTop,
-                behavior: "smooth",
-              });
-            }
-          }, 100);
-
           return;
         }
       }
     }
   }, [highlightedWordId, formattedVerses]);
+
+  useEffect(() => {
+    if (!activeLineId) return;
+    // Scroll to the active line
+    setTimeout(() => {
+      const lineElement = document.getElementById(activeLineId);
+      if (lineElement) {
+        // Calculate scroll position to center the line
+        const rect = lineElement.getBoundingClientRect();
+        const scrollTop =
+          rect.top +
+          window.pageYOffset -
+          window.innerHeight / 2 +
+          rect.height / 2 +
+          100;
+
+        window.scrollTo({
+          top: scrollTop,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
+  }, [activeLineId]);
 
   return (
     <div
@@ -238,6 +240,10 @@ const ParashaText = ({
       <TextToggleSwitch
         isPlainText={showPlainText}
         onChange={setShowPlainText}
+      />
+      <TorahPointer
+        highlightedWordId={highlightedWordId}
+        inactivityTimeout={5000}
       />
 
       {formattedVerses.map(({ perek, lines }, perekIndex) => (
