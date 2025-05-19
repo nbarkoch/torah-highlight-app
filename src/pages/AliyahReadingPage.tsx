@@ -7,6 +7,8 @@ import type { ProcessedAliyah, ProcessedWord } from "../core/models/Parasha";
 import { useWebAudio } from "../core/hooks/useWebAudio";
 import { useAudioSync } from "../core/hooks/useAudiSync";
 import type { AliyaData } from "../core/models/aliyaResp";
+import TorahPointer from "../components/TorahPointer/TorahPointer";
+import TextToggleSwitch from "../components/TextToggleSwitch";
 
 interface AliyahReadingPageProps {
   jsonData: AliyaData;
@@ -85,12 +87,22 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
     audioUrl: aliyahData.audioUrl,
   });
 
+  // Handler for keyboard events at the container level
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === " " || e.code === "Space") {
+      e.preventDefault();
+      setShowPlainText(!showPlainText);
+    }
+  };
+
   // Platform-agnostic synchronization logic
   const { highlightedWordId } = useAudioSync({
     verses: aliyahData.verses,
     isPlaying,
     currentTime,
   });
+
+  const [showPlainText, setShowPlainText] = useState(false);
 
   const handleWordClick = (clickedWord?: ProcessedWord) => {
     if (clickedWord) {
@@ -99,19 +111,29 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
   };
 
   return (
-    <div className="aliyah-reader-container">
+    <div className="aliyah-reader-container" onKeyDown={handleKeyDown}>
       <header className="aliyah-header">
         <h1>{aliyahData.name}</h1>
         <p>קריאה אינטראקטיבית בתורה</p>
         <p className="english-subtitle">Interactive Torah Reading</p>
       </header>
 
+      <TextToggleSwitch
+        isPlainText={showPlainText}
+        onChange={setShowPlainText}
+      />
+      <TorahPointer
+        highlightedWordId={highlightedWordId}
+        inactivityTimeout={5000}
+        isVisible={showPlainText}
+      />
       <div className="torah-content">
         <ParashaText
           verses={aliyahData.verses}
           highlightedWordId={highlightedWordId}
           offset={aliyahData.offset}
           handleWordClick={handleWordClick}
+          showPlainText={showPlainText}
         />
       </div>
 

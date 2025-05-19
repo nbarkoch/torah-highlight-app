@@ -2,14 +2,13 @@ import { useMemo, useState, useRef, useEffect } from "react";
 import type { ProcessedVerse, ProcessedWord } from "../core/models/Parasha";
 import HighlightableWord from "./HighlightableWord";
 import { numberToHebrew } from "../utils/gematria";
-import TextToggleSwitch from "./TextToggleSwitch";
-import TorahPointer from "./TorahPointer/TorahPointer";
 
 interface ParashaTextProps {
   verses: ProcessedVerse[];
   highlightedWordId: string | null;
   offset?: number;
   handleWordClick: (word?: ProcessedWord) => void;
+  showPlainText: boolean;
 }
 
 interface EnhancedProcessedWord extends ProcessedWord {
@@ -30,8 +29,8 @@ const ParashaText = ({
   highlightedWordId,
   offset = 0,
   handleWordClick,
+  showPlainText,
 }: ParashaTextProps) => {
-  const [showPlainText, setShowPlainText] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [formattedVerses, setFormattedVerses] = useState<
     Array<{
@@ -50,14 +49,6 @@ const ParashaText = ({
       return acc;
     }, {});
   }, [verses]);
-
-  // Handler for keyboard events at the container level
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === " " || e.code === "Space") {
-      e.preventDefault();
-      setShowPlainText(!showPlainText);
-    }
-  };
 
   // Flatten all words into a single array for the flex layout
   const getAllWordsFromVerse = (
@@ -231,22 +222,7 @@ const ParashaText = ({
   }, [activeLineId]);
 
   return (
-    <div
-      className="parasha-text-container"
-      tabIndex={-1}
-      onKeyDown={handleKeyDown}
-      ref={containerRef}
-    >
-      <TextToggleSwitch
-        isPlainText={showPlainText}
-        onChange={setShowPlainText}
-      />
-      <TorahPointer
-        highlightedWordId={highlightedWordId}
-        inactivityTimeout={5000}
-        isVisible={showPlainText}
-      />
-
+    <div className="parasha-text-container" tabIndex={-1} ref={containerRef}>
       {formattedVerses.map(({ perek, lines }, perekIndex) => (
         <div
           key={`perek-${perek || `unknown-${perekIndex}`}`}

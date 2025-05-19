@@ -113,11 +113,12 @@ const TorahPointer = ({
       ref={pointerRef}
       className={`torah-pointer ${isLowered ? "lowered" : ""}`}
       style={{
+        backgroundColor: "red",
         width: "20px",
         height: "20px",
         position: "absolute",
-        top: `${position.top - 280}px`,
-        left: `${position.left - 350}px`,
+        top: `${position.top - 20}px`,
+        left: `${position.left}px`,
         transform: "translateX(-50%)", // Center the pointer horizontally
         transition: "top 0.3s ease, left 0.3s ease, transform 0.5s ease",
       }}
