@@ -1,12 +1,15 @@
-import AliyahReadingPage from "~/AliyahReadingPage";
+import AliyahReadingPage from "~/pages/AliyahReadingPage";
 
 // Import JSON data
 // Note: Make sure the JSON file is in the public folder or properly bundled
-import bereshitData from "../mocks/bereshit1.json";
+import bereshitData from "../mocks/bereshit_a.json";
 
 const HomePage = () => {
   return (
-    <AliyahReadingPage jsonData={bereshitData} audioUrl={"./bereshit/1.mp3"} />
+    <AliyahReadingPage
+      jsonData={bereshitData}
+      audioUrl={"./bereshit/a_1.mp3"}
+    />
   );
 };
 
