@@ -131,6 +131,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
         highlightedWordId={highlightedWordId}
         inactivityTimeout={5000}
         isVisible={showPlainText}
+        isPlaying={isPlaying}
       />
       <div className="torah-content">
         <ParashaText

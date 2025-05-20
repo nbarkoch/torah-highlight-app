@@ -8,12 +8,14 @@ interface TorahPointerProps {
   highlightedWordId: string | null;
   inactivityTimeout?: number; // Time in ms before pointer moves down when inactive
   isVisible?: boolean;
+  isPlaying?: boolean;
 }
 
 const TorahPointer = ({
   highlightedWordId,
   inactivityTimeout = 5000, // Default 5 seconds
   isVisible = false,
+  isPlaying = false,
 }: TorahPointerProps) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isLowered, setIsLowered] = useState(false);
@@ -71,31 +73,18 @@ const TorahPointer = ({
   useEffect(() => {
     const checkInactivity = () => {
       const now = Date.now();
-      if (now - lastUpdateTimeRef.current > inactivityTimeout && !isLowered) {
+      if (
+        now - lastUpdateTimeRef.current > inactivityTimeout &&
+        !isLowered &&
+        !isPlaying
+      ) {
         setIsLowered(true);
       }
     };
 
     const intervalId = setInterval(checkInactivity, 1000);
     return () => clearInterval(intervalId);
-  }, [inactivityTimeout, isLowered]);
-
-  // Adjust position when window scrolls or resizes
-  useEffect(() => {
-    const handleViewportChange = () => {
-      if (highlightedWordId || lastHighlightedWordIdRef.current) {
-        updatePointerPosition();
-      }
-    };
-
-    window.addEventListener("scroll", handleViewportChange);
-    window.addEventListener("resize", handleViewportChange);
-
-    return () => {
-      window.removeEventListener("scroll", handleViewportChange);
-      window.removeEventListener("resize", handleViewportChange);
-    };
-  }, [highlightedWordId, updatePointerPosition]);
+  }, [inactivityTimeout, isLowered, isPlaying]);
 
   // Ensure pointer is visible after first active word
   useEffect(() => {
