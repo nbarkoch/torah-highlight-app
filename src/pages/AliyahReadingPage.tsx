@@ -133,6 +133,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
         isVisible={showPlainText}
         isPlaying={isPlaying}
       />
+
       <div className="torah-content">
         <ParashaText
           verses={aliyahData.verses}

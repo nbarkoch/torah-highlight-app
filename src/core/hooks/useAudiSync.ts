@@ -23,4 +23,9 @@ export const useAudioSync = ({
       setHighlightedWordId(currentWord?.id || null);
     }
   }, [currentTime, isPlaying, setHighlightedWordId]);
+
+  useEffect(() => {
+    words.current = getAllWords(verses);
+    setHighlightedWordId(null);
+  }, [setHighlightedWordId, verses]);
 };
