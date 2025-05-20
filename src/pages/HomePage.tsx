@@ -1,4 +1,4 @@
-import AliyahReadingPage from "./AliyahReadingPage";
+import AliyahReadingPage from "~/AliyahReadingPage";
 
 // Import JSON data
 // Note: Make sure the JSON file is in the public folder or properly bundled
