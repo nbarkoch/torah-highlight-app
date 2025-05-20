@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./NosachSelector.css";
 
 // Define the nosach options
 const nosachOptions = [
-  { id: "a", name: "אשכנז", nameEn: "Ashkenazi", letter: "א" },
-  { id: "s", name: "ספרד", nameEn: "Sephardi", letter: "ס" },
-  { id: "m", name: "מרוקאי", nameEn: "Moroccan", letter: "מ" },
-  { id: "t", name: "תימני", nameEn: "Yemenite", letter: "ת" },
+  { id: "a", name: "אשכנז", nameEn: "Ashkenazi" },
+  { id: "s", name: "ספרד", nameEn: "Sephardi" },
+  { id: "m", name: "מרוקאי", nameEn: "Moroccan" },
+  { id: "t", name: "תימני", nameEn: "Yemenite" },
 ];
 
 import bereshitAshkenaz from "~/mocks/bereshit_a.json";
@@ -36,34 +36,47 @@ const NosachSelector = ({
   initialNosach = "a",
 }: NosachSelectorProps) => {
   const [selectedNosach, setSelectedNosach] = useState(initialNosach);
-  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Get the selected nosach details
+  const selectedOption = nosachOptions.find(
+    (option) => option.id === selectedNosach
+  );
 
   // Handle nosach change
   const handleNosachChange = (nosachId: string) => {
     setSelectedNosach(nosachId);
-
-    // Show toast with tradition name
-    const selectedOption = nosachOptions.find(
-      (option) => option.id === nosachId
-    );
-    setToastMessage(`נוסח ${selectedOption?.name}`);
-    setShowToast(true);
-
-    // Hide toast after 1.5 seconds
-    setTimeout(() => {
-      setShowToast(false);
-    }, 1500);
-
-    // Notify parent component
+    setIsOpen(false);
     onNosachChange(
       nosachId,
       `./bereshit/${nosachId}_1.mp3`,
       jsonData[nosachId]
     );
   };
+
+  // Toggle dropdown
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Initialize on first mount
   useEffect(() => {
@@ -78,56 +91,40 @@ const NosachSelector = ({
   }, [selectedNosach, onNosachChange, hasMounted]);
 
   return (
-    <>
-      <div
-        className="nosach-toggle-container"
-        onMouseEnter={() => setIsTooltipVisible(true)}
-        onMouseLeave={() => setIsTooltipVisible(false)}
+    <div className="nosach-selector" ref={dropdownRef}>
+      <button
+        className="nosach-selector-button"
+        onClick={toggleDropdown}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
       >
-        <div className="nosach-toggle-pill" data-selected={selectedNosach}>
-          <div className="nosach-toggle-spot"></div>
+        <span className="nosach-label">נוסח</span>
+        <span className="nosach-selected-name">{selectedOption?.name}</span>
+        <span className="nosach-arrow">{isOpen ? "▲" : "▼"}</span>
+      </button>
 
+      {isOpen && (
+        <div className="nosach-dropdown">
+          <div className="nosach-dropdown-title">בחר מסורת קריאה</div>
           {nosachOptions.map((option) => (
-            <div
+            <button
               key={option.id}
-              className={`nosach-toggle-option ${
-                selectedNosach === option.id ? "active" : ""
+              className={`nosach-option ${
+                selectedNosach === option.id ? "selected" : ""
               }`}
               onClick={() => handleNosachChange(option.id)}
+              aria-selected={selectedNosach === option.id}
             >
-              <span className="nosach-letter">{option.letter}</span>
-            </div>
+              <span className="nosach-option-name">{option.name}</span>
+              <span className="nosach-option-name-en">{option.nameEn}</span>
+              {selectedNosach === option.id && (
+                <span className="nosach-check">✓</span>
+              )}
+            </button>
           ))}
         </div>
-
-        {isTooltipVisible && (
-          <div className="nosach-tooltip">
-            <div className="nosach-tooltip-content">
-              <div className="nosach-tooltip-title">בחר מסורת קריאה</div>
-              <div className="nosach-tooltip-options">
-                {nosachOptions.map((option) => (
-                  <div
-                    key={option.id}
-                    className="nosach-tooltip-option"
-                    onClick={() => handleNosachChange(option.id)}
-                  >
-                    <div className="nosach-tooltip-icon">{option.letter}</div>
-                    <div className="nosach-tooltip-label">
-                      {option.name} - {option.nameEn}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Toast notification */}
-      <div className={`nosach-toast ${showToast ? "visible" : "hidden"}`}>
-        {toastMessage}
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 

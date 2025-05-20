@@ -1,219 +1,146 @@
-.nosach-toggle-container {
+/* NosachSelector.css - Dropdown style */
+.nosach-selector {
   position: fixed;
-  top: 90px; /* Position below the text toggle switch */
+  top: 100px;
   right: 20px;
   z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.nosach-toggle-pill {
-  position: relative;
-  width: 60px;
-  height: 240px; /* Height for 4 options */
-  background: white;
-  border-radius: 30px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.nosach-toggle-spot {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  background-color: #676767;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  z-index: 1;
-}
-
-/* Position the spot for each selection */
-.nosach-toggle-pill[data-selected="a"] .nosach-toggle-spot {
-  top: 8px;
-}
-.nosach-toggle-pill[data-selected="s"] .nosach-toggle-spot {
-  top: 66px;
-}
-.nosach-toggle-pill[data-selected="m"] .nosach-toggle-spot {
-  top: 124px;
-}
-.nosach-toggle-pill[data-selected="t"] .nosach-toggle-spot {
-  top: 182px;
-}
-
-.nosach-toggle-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  z-index: 2;
-  transition: all 0.3s ease;
-  border-radius: 25px;
-}
-
-.nosach-letter {
-  font-size: 20px;
-  font-weight: bold;
+  direction: rtl;
   font-family: "David Libre", serif;
-  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-/* For active option */
-.nosach-toggle-option.active .nosach-letter {
-  color: white;
-  transform: scale(1.1);
+.nosach-selector-button {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  height: 32px;
+  color: #333;
 }
 
-/* For inactive options */
-.nosach-toggle-option:not(.active) .nosach-letter {
+.nosach-selector-button:hover {
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.nosach-label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-left: 6px;
+  color: #676767;
+}
+
+.nosach-selected-name {
+  font-size: 0.9rem;
+  margin-left: 6px;
+}
+
+.nosach-arrow {
+  font-size: 0.7rem;
   color: #888;
+  transition: transform 0.2s ease;
 }
 
-/* Tooltip styles */
-.nosach-tooltip {
+.nosach-dropdown {
   position: absolute;
-  top: 12px;
-  right: 70px;
-  width: 180px;
-  background: white;
+  top: 100%;
+  right: 0;
+  margin-top: 5px;
+  background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  padding: 12px;
+  padding: 10px 0;
+  width: 180px;
   z-index: 1001;
-  opacity: 0;
-  animation: fadeIn 0.3s ease forwards;
-  direction: rtl;
+  animation: fadeInDropdown 0.2s ease forwards;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInDropdown {
   from {
     opacity: 0;
-    transform: translateX(10px);
+    transform: translateY(-5px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
-.nosach-tooltip-content {
+.nosach-dropdown-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 5px 15px;
+  margin-bottom: 5px;
+  color: #676767;
+  border-bottom: 1px solid #eee;
+}
+
+.nosach-option {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 8px 15px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-align: right;
+  position: relative;
+  transition: background-color 0.2s ease;
 }
 
-.nosach-tooltip-title {
-  font-size: 16px;
+.nosach-option:hover {
+  background-color: #f8f9fa;
+}
+
+.nosach-option.selected {
+  background-color: #f0f0f0;
+}
+
+.nosach-option-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.nosach-option-name-en {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.nosach-check {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #676767;
   font-weight: bold;
-  margin-bottom: 8px;
-  color: #1e293b;
-  font-family: "David Libre", serif;
-}
-
-.nosach-tooltip-options {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.nosach-tooltip-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.nosach-tooltip-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: #f8fafc;
-  font-size: 14px;
-  font-weight: bold;
-  font-family: "David Libre", serif;
-}
-
-.nosach-tooltip-label {
-  font-size: 14px;
-  color: #334155;
-}
-
-/* Toast notification */
-.nosach-toast {
-  position: fixed;
-  bottom: 80px;
-  right: 90px;
-  background-color: rgba(0, 0, 0, 0.75);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: "David Libre", serif;
-  z-index: 2000;
-  transition: all 0.3s ease;
-  direction: rtl;
-}
-
-.nosach-toast.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.nosach-toast.hidden {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .nosach-toggle-container {
-    top: 76px;
-    right: 15px;
+  .nosach-selector {
+    right: 75px;
   }
 
-  .nosach-toggle-pill {
-    width: 50px;
-    height: 200px;
+  .nosach-selector-button {
+    padding: 5px 10px;
+    height: 28px;
   }
 
-  .nosach-toggle-spot {
-    width: 40px;
-    height: 40px;
+  .nosach-label {
+    font-size: 0.8rem;
   }
 
-  .nosach-toggle-option {
-    width: 40px;
-    height: 40px;
+  .nosach-selected-name {
+    font-size: 0.8rem;
   }
 
-  .nosach-letter {
-    font-size: 16px;
-  }
-
-  /* Adjust positions for mobile */
-  .nosach-toggle-pill[data-selected="a"] .nosach-toggle-spot {
-    top: 8px;
-  }
-  .nosach-toggle-pill[data-selected="s"] .nosach-toggle-spot {
-    top: 56px;
-  }
-  .nosach-toggle-pill[data-selected="m"] .nosach-toggle-spot {
-    top: 104px;
-  }
-  .nosach-toggle-pill[data-selected="t"] .nosach-toggle-spot {
-    top: 152px;
+  .nosach-dropdown {
+    width: 160px;
   }
 }
