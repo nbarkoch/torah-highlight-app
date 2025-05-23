@@ -1,4 +1,4 @@
-import type { AliyaData } from "../core/models/aliyaResp";
+import type { AliyaAudioData, AliyaData } from "../core/models/aliyaResp";
 import type { Aliyah, ProcessedAliyah } from "../core/models/Parasha";
 
 const hebrewSpellAlya = [
@@ -17,7 +17,7 @@ const hebrewSpellAlya = [
  * This function is the main entry point for processing raw JSON data
  */
 export const parseAliyahJson = (
-  rawData: AliyaData,
+  rawData: AliyaData & AliyaAudioData,
   audioUrl: string
 ): ProcessedAliyah => {
   try {
@@ -28,7 +28,7 @@ export const parseAliyahJson = (
       name: hebrewSpellAlya[aliyaIndex],
       verses:
         rawData.t_words.map((tword, index) => ({
-          text: rawData.verses[index],
+          text: rawData.verses[index].text,
           words: tword.text,
           start: tword.start,
           end: tword.end,

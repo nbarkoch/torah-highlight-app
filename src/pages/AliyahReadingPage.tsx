@@ -6,27 +6,44 @@ import { parseAliyahJson } from "../utils/parser";
 import type { ProcessedAliyah, ProcessedWord } from "../core/models/Parasha";
 import { useWebAudio } from "../core/hooks/useWebAudio";
 import { useAudioSync } from "../core/hooks/useAudiSync";
-import type { AliyaData } from "../core/models/aliyaResp";
+import type { AliyaAudioData, AliyaData } from "../core/models/aliyaResp";
 import TorahPointer from "../components/TorahPointer/TorahPointer";
 import TextToggleSwitch from "../components/TextToggleSwitch";
-
+import NosachSelector from "~/components/NosachSelector/NosachSelector";
+import bereshitAudioAshkenaz from "../mocks/bereshit_a.json";
 interface AliyahReadingPageProps {
   jsonData: AliyaData;
-  audioUrl: string;
 }
 
-const AliyahReadingPage = ({ jsonData, audioUrl }: AliyahReadingPageProps) => {
-  const [aliyahData, setAliyahData] = useState<ProcessedAliyah | null>(null);
+const AliyahReadingPage = ({ jsonData }: AliyahReadingPageProps) => {
+  const [aliyaFinalhData, setAliyahFinalData] =
+    useState<ProcessedAliyah | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const [jsonAudioData, setJsonAudioData] = useState(bereshitAudioAshkenaz);
+  const [audioUrl, setAudioUrl] = useState("./bereshit/a_1.mp3");
+
+  const handleNosachChange = (
+    audioPath: string,
+    jsonAudioData: AliyaAudioData
+  ) => {
+    setLoading(true);
+    setJsonAudioData(jsonAudioData);
+    setAudioUrl(audioPath);
+    setLoading(false);
+  };
 
   // Process the aliyah data when available
   useEffect(() => {
     try {
       // Parse the JSON data
-      const processedData = parseAliyahJson(jsonData, audioUrl);
+      const processedData = parseAliyahJson(
+        { ...jsonData, ...jsonAudioData },
+        audioUrl
+      );
 
-      setAliyahData(processedData);
+      setAliyahFinalData(processedData);
       setLoading(false);
     } catch (err) {
       console.error("Error processing aliyah data:", err);
@@ -35,7 +52,7 @@ const AliyahReadingPage = ({ jsonData, audioUrl }: AliyahReadingPageProps) => {
       );
       setLoading(false);
     }
-  }, [jsonData, audioUrl]);
+  }, [jsonData, audioUrl, jsonAudioData]);
 
   // If still loading or there's an error, show a message
   if (loading) {
@@ -50,7 +67,7 @@ const AliyahReadingPage = ({ jsonData, audioUrl }: AliyahReadingPageProps) => {
     );
   }
 
-  if (error || !aliyahData) {
+  if (error || !aliyaFinalhData) {
     return (
       <div className="error-container">
         <h2>שגיאה</h2>
@@ -65,14 +82,23 @@ const AliyahReadingPage = ({ jsonData, audioUrl }: AliyahReadingPageProps) => {
     );
   }
 
-  return <AliyahReader aliyahData={aliyahData} />;
+  return (
+    <AliyahReader
+      aliyaFinalhData={aliyaFinalhData}
+      handleNosachChange={handleNosachChange}
+    />
+  );
 };
 
 interface AliyahReaderProps {
-  aliyahData: ProcessedAliyah;
+  aliyaFinalhData: ProcessedAliyah;
+  handleNosachChange: (audioUrl: string, jsonAudioData: AliyaAudioData) => void;
 }
 
-const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
+const AliyahReader = ({
+  aliyaFinalhData,
+  handleNosachChange,
+}: AliyahReaderProps) => {
   // Web-specific audio handling
   const {
     isPlaying,
@@ -84,7 +110,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
     isLoading,
     error,
   } = useWebAudio({
-    audioUrl: aliyahData.audioUrl,
+    audioUrl: aliyaFinalhData.audioUrl,
   });
 
   // Handler for keyboard events at the container level
@@ -100,7 +126,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
   );
 
   useAudioSync({
-    verses: aliyahData.verses,
+    verses: aliyaFinalhData.verses,
     isPlaying,
     currentTime,
     setHighlightedWordId,
@@ -115,10 +141,20 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
     }
   };
 
+  const $handleNosachChange = (
+    audioUrl: string,
+    jsonAudioData: AliyaAudioData
+  ) => {
+    if (isPlaying) {
+      togglePlayPause();
+    }
+    handleNosachChange(audioUrl, jsonAudioData);
+  };
+
   return (
     <div className="aliyah-reader-container" onKeyDown={handleKeyDown}>
       <header className="aliyah-header">
-        <h1>{aliyahData.name}</h1>
+        <h1>{aliyaFinalhData.name}</h1>
         <p>קריאה אינטראקטיבית בתורה</p>
         <p className="english-subtitle">Interactive Torah Reading</p>
       </header>
@@ -127,6 +163,9 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
         isPlainText={showPlainText}
         onChange={setShowPlainText}
       />
+
+      <NosachSelector onNosachChange={$handleNosachChange} initialNosach="a" />
+
       <TorahPointer
         highlightedWordId={highlightedWordId}
         inactivityTimeout={5000}
@@ -136,12 +175,12 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
 
       <div className="torah-content">
         <ParashaText
-          verses={aliyahData.verses}
+          verses={aliyaFinalhData.verses}
           highlightedWordId={highlightedWordId}
-          offset={aliyahData.offset}
+          offset={aliyaFinalhData.offset}
           handleWordClick={handleWordClick}
           showPlainText={showPlainText}
-          stops={aliyahData.stops}
+          stops={aliyaFinalhData.stops}
         />
       </div>
 

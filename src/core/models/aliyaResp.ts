@@ -22,10 +22,13 @@ export type AliyaData = {
     text: string;
   }[];
   perek_starts: PerekStarts[];
-  t_words: TWord[];
   start_offset: number;
   stops: Stop[];
   parasha_num: number;
   aliya: number;
   aliya_name: string;
+};
+
+export type AliyaAudioData = {
+  t_words: TWord[];
 };

@@ -13,9 +13,9 @@ import bereshitAshkenaz from "~/mocks/bereshit_a.json";
 import bereshitSephardi from "~/mocks/bereshit_s.json";
 import bereshitMarocai from "~/mocks/bereshit_m.json";
 import bereshitTemani from "~/mocks/bereshit_t.json";
-import type { AliyaData } from "~/core/models/aliyaResp";
+import type { AliyaAudioData } from "~/core/models/aliyaResp";
 
-const jsonData: Record<string, AliyaData> = {
+const jsonData: Record<string, AliyaAudioData> = {
   a: bereshitAshkenaz,
   s: bereshitSephardi,
   m: bereshitMarocai,
@@ -23,11 +23,7 @@ const jsonData: Record<string, AliyaData> = {
 };
 
 interface NosachSelectorProps {
-  onNosachChange: (
-    nosachId: string,
-    audioUrl: string,
-    jsonData: AliyaData
-  ) => void;
+  onNosachChange: (audioUrl: string, jsonData: AliyaAudioData) => void;
   initialNosach?: string;
 }
 
@@ -49,11 +45,7 @@ const NosachSelector = ({
   const handleNosachChange = (nosachId: string) => {
     setSelectedNosach(nosachId);
     setIsOpen(false);
-    onNosachChange(
-      nosachId,
-      `./bereshit/${nosachId}_1.mp3`,
-      jsonData[nosachId]
-    );
+    onNosachChange(`./bereshit/${nosachId}_1.mp3`, jsonData[nosachId]);
   };
 
   // Toggle dropdown
@@ -82,7 +74,6 @@ const NosachSelector = ({
   useEffect(() => {
     if (!hasMounted) {
       onNosachChange(
-        selectedNosach,
         `./bereshit/${selectedNosach}_1.mp3`,
         jsonData[selectedNosach]
       );
