@@ -14,9 +14,12 @@ type PerekStarts = {
   start_index: number;
 };
 
+export type Stop = { type: "פ" | "ס"; verse_index: number };
+
 export type AliyaData = {
   verses: string[];
   perek_starts: PerekStarts[];
   t_words: TWord[];
   start_offset: number;
+  stops: Stop[];
 };

@@ -36,6 +36,7 @@ export const parseAliyahJson = (
       audioUrl,
       perek_starts: rawData.perek_starts || [],
       offset: rawData.start_offset,
+      stops: rawData.stops,
     };
 
     // Process the aliyah data
@@ -79,6 +80,7 @@ export const processAliyahForRendering = (aliyah: Aliyah): ProcessedAliyah => {
       text: verseText.text,
       words,
       perek,
+      stop: aliyah.stops.find((stop) => stop.verse_index === index)?.type,
     };
   });
 
@@ -88,5 +90,6 @@ export const processAliyahForRendering = (aliyah: Aliyah): ProcessedAliyah => {
     verses: processedVerses,
     audioUrl: aliyah.audioUrl,
     offset: aliyah.offset,
+    stops: aliyah.stops,
   };
 };

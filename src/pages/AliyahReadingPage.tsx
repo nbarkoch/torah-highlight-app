@@ -141,6 +141,7 @@ const AliyahReader = ({ aliyahData }: AliyahReaderProps) => {
           offset={aliyahData.offset}
           handleWordClick={handleWordClick}
           showPlainText={showPlainText}
+          stops={aliyahData.stops}
         />
       </div>
 

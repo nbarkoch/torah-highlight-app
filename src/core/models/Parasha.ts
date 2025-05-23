@@ -1,3 +1,5 @@
+import type { Stop } from "./aliyaResp";
+
 export interface Word {
   word: string;
   start: number; // seconds
@@ -23,6 +25,7 @@ export interface Aliyah {
   perek_starts: PerekStart[];
   audioUrl: string;
   offset: number;
+  stops: Stop[];
 }
 
 // Holds the complete parsed data structure for rendering
@@ -32,6 +35,7 @@ export interface ProcessedAliyah {
   verses: ProcessedVerse[];
   audioUrl: string;
   offset: number;
+  stops: Stop[];
 }
 
 export interface ProcessedVerse {
@@ -39,6 +43,7 @@ export interface ProcessedVerse {
   text: string;
   words: ProcessedWord[];
   perek?: string;
+  stop?: "פ" | "ס";
 }
 
 export interface ProcessedWord {

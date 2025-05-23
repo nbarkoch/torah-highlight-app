@@ -1192,7 +1192,7 @@ body {
 }
 
 /* Add a subtle line separator effect between lines */
-.torah-line:not(:last-child)::after {
+.torah-line::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -1294,4 +1294,39 @@ body {
   animation: currentLineGlow 2s ease-in-out infinite;
   background-color: rgba(251, 191, 36, 0.1);
   border-radius: 6px;
+}
+
+/* Perek symbol styling */
+.perek-symbol {
+  font-family: "David Libre", serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-color, #d97706);
+  margin-left: 8px;
+  margin-right: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: rgba(217, 119, 6, 0.1);
+  display: inline-block;
+  transition: opacity 0.3s ease;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .perek-symbol {
+    font-size: 1rem;
+    margin-left: 4px;
+    margin-right: 4px;
+    padding: 1px 4px;
+  }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .perek-symbol {
+    font-size: 1rem;
+    margin-left: 4px;
+    margin-right: 4px;
+    padding: 1px 4px;
+  }
 }

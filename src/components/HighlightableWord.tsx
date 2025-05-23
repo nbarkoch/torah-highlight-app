@@ -31,7 +31,16 @@ const HighlightableWord = ({
       data-word-id={id}
     >
       <span style={{ position: "relative" }}>
-        <span style={{ opacity: 0 }}>{text}</span>
+        <span
+          style={{
+            opacity: 0,
+            pointerEvents: "none",
+            userSelect: "none",
+            zIndex: -1,
+          }}
+        >
+          {text}
+        </span>
         <span style={{ position: "absolute", left: 0 }}>
           {showPlainText ? removeNikkudAndTaamim(text) : text}
         </span>
