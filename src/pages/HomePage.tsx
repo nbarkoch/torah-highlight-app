@@ -31,7 +31,10 @@ const HomePage = () => {
           <p className="loading-subtitle">Loading reading tradition...</p>
         </div>
       ) : (
-        <AliyahReadingPage jsonData={jsonData} audioUrl={audioUrl} />
+        <AliyahReadingPage
+          jsonData={jsonData as AliyaData}
+          audioUrl={audioUrl}
+        />
       )}
     </div>
   );
